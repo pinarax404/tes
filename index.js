@@ -11,15 +11,14 @@ if (!fs.existsSync('../storage/downloads/akun_target.txt')) {fs.appendFileSync('
 process.stdout.write('\033c');
 
 const main = async (a) => {
-    const create = await createAccount(a);
-    if (create !== false) {
-        fs.appendFileSync('../storage/downloads/hasil_akun_ig.txt', create.username + '|' + create.password + '|' + create.email + '|' + create.cookies + '\n');
+    const create = await createAccount();
+    if (create === true) {
         if (a === 1) {
             console.log(chalk`{bold.white ========================================}`);
             main(a);
         } else if (a === 2) {
-            const upload = await uploadProfile(create.cookies);
-            if (upload === true) {
+            const updateProfile = await uploadProfile();
+            if (updateProfile === true) {
                 console.log(chalk`{bold.white ✔ Profile: {bold.green Success}}`);
                 console.log(chalk`{bold.white ========================================}`);
                 main(a);
@@ -33,8 +32,8 @@ const main = async (a) => {
             const link = await getLink();
             const target = await getTarget();
 
-            const updateProfile = await uploadProfile(create.cookies);
-            const updateBio = await editBio(create.cookies, {'bio': bio, 'link': link});
+            const updateProfile = await uploadProfile();
+            const updateBio = await editBio({'bio': bio, 'link': link});
 
             if (updateProfile === true) {
                 console.log(chalk`{bold.white ✔ Profile: {bold.green Success}}`);
@@ -52,7 +51,7 @@ const main = async (a) => {
 
             const checkTarget = await checktarget(create.cookies, {'target': target});
             if (checkTarget !== false && checkTarget.is_private === false) {
-                const grab = await follow(create.cookies, {'mode': 'followers', 'target': target});
+                const grab = await follow({'mode': 'followers', 'target': checkTarget.uid});
                 if (grab === true) {
                     console.log(chalk`{bold.green Follow Complete}`);
                     console.log(chalk`{bold.white ========================================}`);
@@ -63,7 +62,7 @@ const main = async (a) => {
                     main(a);
                 }
             } else if (checkTarget !== false && checkTarget.is_private === true) {
-                console.log(chalk`{bold.yellow Target ${checkTarget} is Private}`);
+                console.log(chalk`{bold.yellow Target ${checkTarget.uid} is Private}`);
                 console.log(chalk`{bold.white ========================================}`);
                 main(a);
             } else {
