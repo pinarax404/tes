@@ -172,14 +172,27 @@ const igApiUpProfile = async () => {
 function cookies(a, b) {
     if (a === 'deSerialize') {
         if (b.headers.raw()['set-cookie']) {
-            header['cookie'] = '';
-            var raw = b.headers.raw()['set-cookie'];
-            raw.map((entry) => {
+            var t = {};
+            var rawOld = header['cookie'].split(';');
+            for (var i in rawOld) {
+                if (rawOld[i] !== '') {
+                    var name = rawOld[i].split(';')[0].split('=')[0];
+                    var value = rawOld[i].split(';')[0].split('=')[1];
+                    t[name] = value;
+                }
+            }
+
+            var rawNew = b.headers.raw()['set-cookie'];
+            rawNew.map((entry) => {
                 var name = entry.split(';')[0].split('=')[0];
                 var value = entry.split(';')[0].split('=')[1];
-                header['cookie'] += name + '=' + value + ';';
+                t[name] = value;
                 if (name === 'csrftoken') {header['x-csrftoken'] = value}
             });
+
+            var newCok = '';
+            for (var key in t) {newCok += key + '=' + t[key] + ';'}
+            header['cookie'] = newCok;
             return true;
         } else {
             return false;
