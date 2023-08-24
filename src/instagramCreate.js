@@ -1,3 +1,4 @@
+const fs = require('fs');
 const chalk = require('chalk');
 const fetch = require('node-fetch');
 const FormData 	= require('form-data');
