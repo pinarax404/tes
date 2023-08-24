@@ -35,49 +35,45 @@ const mailId = async () => {
     }
 }
 
-const mailCode = async (session) => {
+const mailCode = async (mailId) => {
     try {
-        var ajax = await fetch('http://mail.ese.kr/', {'headers': {'content-type': 'application/x-www-form-urlencoded'}, 'timeout': 35000, 'body': `mail_id=&mail_mode=text&lang=en&mailbox=${session}`, 'method': 'POST'}).then((e) => {return e}).catch((e) => {return false});
+        var ajax = await fetch('http://mail.ese.kr/', {'headers': {'content-type': 'application/x-www-form-urlencoded'}, 'timeout': 35000, 'body': `mail_id=&mail_mode=text&lang=en&mailbox=${mailId}`, 'method': 'POST'}).then((e) => {return e}).catch((e) => {return false});
         var res = await ajax.text();
         if (res.includes('no-reply@mail.instagram.com')) {
             var sbj = res.split('no-reply@mail.instagram.com')[1].split('is your Instagram code')[0];
             var mail_code = sbj.match(/\d+/)[0];
             return mail_code;
         } else {
-            return 'null';
+            return '';
         }
     } catch (err) {
         return false;
     }
 }
 
-const userAgent = () => {
-	var list = [
-        "Mozilla/5.0 (Linux; Android 8.0.0; SM-G935F Build/R16NW; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/115.0.5790.166 Mobile Safari/537.36 [FB_IAB/FB4A;FBAV/427.0.0.31.63;]",
-        "Mozilla/5.0 (Linux; Android 6.0.1; SM-G935F Build/MMB29K; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/103.0.5060.71 Mobile Safari/537.36 [FB_IAB/FB4A;FBAV/420.0.0.32.61;]",
-        "Mozilla/5.0 (Linux; Android 8.0.0; SM-G935F Build/R16NW; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/114.0.5735.130 Mobile Safari/537.36 [FB_IAB/FB4A;FBAV/420.0.0.32.61;]",
-        "Mozilla/5.0 (Linux; Android 8.0.0; SM-G935F Build/R16NW; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/114.0.5735.141 Mobile Safari/537.36 [FB_IAB/FB4A;FBAV/420.0.0.32.61;]",
-        "Mozilla/5.0 (Linux; Android 8.0.0; SAMSUNG SM-G935F) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/22.0 Chrome/111.0.5563.116 Mobile Safari/537.36",
-        "Mozilla/5.0 (Linux; Android 8.0.0; SM-G935F Build/R16NW; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/114.0.5735.130 Mobile Safari/537.36 [FB_IAB/FB4A;FBAV/419.0.0.37.71;]",
-        "Mozilla/5.0 (Linux; Android 8.0.0; SM-G935F Build/R16NW; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/113.0.5672.162 Mobile Safari/537.36 Flipboard/4.3.10/5354,4.3.10.5354",
-        "Mozilla/5.0 (Linux; Android 8.0.0; SM-G935F Build/R16NW; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/114.0.5735.60 Mobile Safari/537.36 [FB_IAB/FB4A;FBAV/417.0.0.33.65;]",
-        "Mozilla/5.0 (Linux; Android 8.0.0; SM-G935U Build/R16NW; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/69.0.3497.100 Mobile Safari/537.36 [FB_IAB/FB4A;FBAV/397.0.0.23.404;]",
-        "Mozilla/5.0 (Linux; Android 8.0.0; SM-G935F Build/R16NW; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/113.0.5672.163 Mobile Safari/537.36 [FB_IAB/FB4A;FBAV/415.0.0.34.107;]",
-        "Mozilla/5.0 (Linux; Android 8.0.0; SM-G935F Build/R16NW; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/70.0.3538.110 Mobile Safari/537.36[FBAN/EMA;FBLC/en_US;FBAV/309.0.0.16.114;]",
-        "Mozilla/5.0 (Linux; Android 8.0.0; SM-G935F Build/R16NW; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/113.0.5672.77 Mobile Safari/537.36 [FB_IAB/FB4A;FBAV/413.0.0.30.104;]",
-        "Mozilla/5.0 (Linux; Android 8.0.0; SAMSUNG SM-G935A) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/21.0 Chrome/110.0.5481.154 Mobile Safari/537.36",
-        "Mozilla/5.0 (Linux; Android 7.0; SM-G935T Build/NRD90M; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/57.0.2987.132 Mobile Safari/537.36 [FB_IAB/MESSENGER;FBAV/113.0.0.21.70;]",
-        "Mozilla/5.0 (Linux; Android 8.0.0; SM-G935VC Build/R16NW; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/112.0.5615.136 Mobile Safari/537.36 [FB_IAB/FB4A;FBAV/411.1.0.29.112;]",
-        "Mozilla/5.0 (Linux; Android 8.0.0; SM-G935S Build/R16NW; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/109.0.5414.85 Mobile Safari/537.36 [FB_IAB/FB4A;FBAV/400.0.0.37.76;]",
-        "Mozilla/5.0 (Linux; Android 8.0.0; SM-G935L Build/R16NW; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/101.0.4951.61 Mobile Safari/537.36 [FB_IAB/FB4A;FBAV/384.1.0.29.111;]",
-        "Mozilla/5.0 (Linux; Android 8.0.0; SM-G935F Build/R16NW; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/108.0.5359.79 Mobile Safari/537.36 [FB_IAB/FB4A;FBAV/394.1.0.51.107;]",
-        "Mozilla/5.0 (Linux; Android 8.0.0; SM-G935F Build/R16NW; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/107.0.5304.105 Mobile Safari/537.36 [FB_IAB/FB4A;FBAV/393.0.0.35.106;]",
-        "Mozilla/5.0 (Linux; Android 8.0.0; SM-G935F Build/R16NW; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/111.0.5563.116 Mobile Safari/537.36 [FB_IAB/FB4A;FBAV/408.1.0.36.103;]"
-    ];
-    var agent = list[Math.floor(Math.random() * list.length)];
-    return agent;
+const getCode = async (mailId) => {
+    const r = await mailCode(mailId);
+    if (r === false) {return false} else if (r !== '') {return r} else {
+        await delay(5000);
+        const r = await mailCode(mailId);
+        if (r === false) {return false} else if (r !== '') {return r} else {
+            await delay(5000);
+            const r = await mailCode(mailId);
+            if (r === false) {return false} else if (r !== '') {return r} else {
+                await delay(5000);
+                const r = await mailCode(mailId);
+                if (r === false) {return false} else if (r !== '') {return r} else {
+                    await delay(5000);
+                    const r = await mailCode(mailId);
+                    if (r === false) {return false} else if (r !== '') {return r} else {
+                        return false;
+                    }
+                }
+            }
+        }
+    }
 }
 
 const delay = async (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-module.exports = { myIp, fullName, mailId, mailCode, userAgent, delay };
+module.exports = { myIp, fullName, mailId, getCode, delay };
