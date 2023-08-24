@@ -59,7 +59,7 @@ const igCreate = async (modeCreate, modeAgent) => {
                             console.log(chalk`{bold.white ========================================}`);
                         }
                         const koki = await cookies('serialize');
-                        return koki;
+                        return {'email': email , 'first_name': name, 'username': username, 'cookieJar': koki};
                     } else {
                         console.log(chalk`{bold.white ✔ Profile: {bold.yellow none}}`);
                         console.log(chalk`{bold.white ========================================}`);
