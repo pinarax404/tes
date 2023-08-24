@@ -12,20 +12,20 @@ if (!fs.existsSync('../storage/downloads/akun_target.txt')) {fs.appendFileSync('
 process.stdout.write('\033c');
 
 const create = async (modeCreate, modeAgent) => {
-    var cookieJar = await igCreate(modeCreate, modeAgent);
+    var toolsCreate = await igCreate(modeCreate, modeAgent);
 
-    if (cookieJar !== false) {
+    if (toolsCreate !== false) {
         if (modeCreate === 3) {
             const bio = getBio();
             const link = getLink();
             const target = getTarget();
-            const setBio = await igEditBio(bio, link, cookieJar.email, cookieJar.first_name, cookieJar.username, cookieJar.cookieJar);
+            const setBio = await igEditBio(bio, link, toolsCreate);
             if (setBio && setBio.user && setBio.user.biography) {
                 console.log(chalk`{bold.white Update Bio {bold.green Success}}`);
             } else {
                 console.log(chalk`{bold.white Update Bio {bold.red Failed}}`);
             }
-            await igFollowFollowers(target, cookieJar);
+            await igFollowFollowers(target, toolsCreate);
             create(modeCreate, modeAgent);
         } else {
             create(modeCreate, modeAgent);
