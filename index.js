@@ -36,11 +36,18 @@ const main = async (a) => {
             const updateProfile = await uploadProfile(create.cookies);
             const updateBio = await editBio(create.cookies, {'bio': bio, 'link': link});
 
-            updateProfile = updateProfile ? `✔ Profile: ${chalk.bold.green('Success')}` : `✘ Profile: ${chalk.bold.red('Failed')}`;
-            updateBio = updateBio ? `✔ Bio: ${chalk.bold.green('Success')}` : `✘ Bio: ${chalk.bold.red('Failed')}`;
+            if (updateProfile === true) {
+                console.log(chalk`{bold.white ✔ Profile: {bold.green Success}}`);
+            } else {
+                console.log(chalk`{bold.white ✘ Profile: {bold.red Failed}}`);
+            }
 
-            console.log(chalk`{bold.white ${updateProfile}}`);
-            console.log(chalk`{bold.white ${updateBio}}`);
+            if (updateBio === true) {
+                console.log(chalk`{bold.white ✔ Bio: {bold.green Success}}`);
+            } else {
+                console.log(chalk`{bold.white ✘ Bio: {bold.red Failed}}`);
+            }
+
             console.log(chalk`{bold.white ========================================}`);
 
             const checkTarget = await checktarget(create.cookies, {'target': target});
