@@ -40,7 +40,7 @@ const igCreate = async (modeCreate, modeAgent) => {
                 await delay(1000);
                 code = reqGetCode;
             } while(reqGetCode === null && loop < 20);
-            if (code !== null || code !== false) {
+            if (code !== false || code !== null || code !== 'null') {
                 console.log(chalk`{bold.white Waiting Email Code: {bold.green ${code}}}`);
                 await igApiCreate(code, email, name, username, password, modeAgent);
                 var check = await igApiCheck(username);
