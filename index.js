@@ -86,7 +86,7 @@ const getBio = async () => {
 
 const getLink = async () => {
     var data = fs.readFileSync('../storage/downloads/bio_link.txt', 'utf8');
-    var lines = data.split('\n');
+    var lines = data.split('\r\n');
     if (lines.length > 0 && lines[0] !== '') {
         var toSend = lines[0];
         lines.splice(0, 1);
@@ -99,7 +99,7 @@ const getLink = async () => {
 
 const getTarget = async () => {
     var data = fs.readFileSync('../storage/downloads/akun_target.txt', 'utf8');
-    var lines = data.split('\n');
+    var lines = data.split('\r\n');
     if (lines.length > 0 && lines[0] !== '') {
         var toSend = lines[0];
         lines.splice(0, 1);
