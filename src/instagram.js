@@ -17,7 +17,7 @@ const createAccount = async (a) => {
     const username = await requestWeb('suggestuser', {'first_name': first_name});
     const password = 'badakweslepas';
     
-    if (openApp !== false && first_name !== false && email !== false && username !== false) {
+    if (first_name !== false && email !== false && username !== false) {
         const sendMail = await requestWeb('sendmail', {'email': email});
         if (sendMail === true) {
             const code = await getCode(email);
