@@ -13,7 +13,7 @@ var header = {
     'cookie': ''
 }
 
-async function igEditBio(bio, link, email, first_name, username, cookieJar) {
+async function igEditBio(bio, link, cookie) {
     var head = {
         'User-Agent': 'Instagram 121.0.0.29.119 Android (26/8.0.0; 480dpi; 1080x2076; samsung; SM-A530F; jackpotlte; samsungexynos7885; en_US; 185203708)',
         'X-Ads-Opt-Out': '0',
@@ -29,7 +29,7 @@ async function igEditBio(bio, link, email, first_name, username, cookieJar) {
         'X-IG-Bandwidth-TotalTime-MS': '0',
         'X-IG-Extended-CDN-Thumbnail-Cache-Busting-Value': '1000',
         'X-Bloks-Version-Id': '1b030ce63a06c25f3e4de6aaaf6802fe1e76401bc5ab6e5fb85ed6c2d333e0c7',
-        'X-MID': cookieJar.mid,
+        'X-MID': cookie.mid,
         'X-IG-WWW-Claim': '0',
         'X-Bloks-Is-Layout-RTL': 'false',
         'X-IG-Connection-Type': 'WIFI',
@@ -37,12 +37,12 @@ async function igEditBio(bio, link, email, first_name, username, cookieJar) {
         'X-IG-App-ID': '567067343352427',
         'X-IG-Device-ID': uuid(),
         'X-IG-Android-ID': 'android-18c7682505872861',
-        'cookie': cookieJar.cookieJar,
+        'cookie': cookie.cookiejar,
         'content-type': 'application/x-www-form-urlencoded'
     };
 
     try {
-        var body = `ig_sig_key_version=4&signed_body=8429b96afd2a02dd472616692424e8e5dbc394edc6cf49b1f2ace60273c08188.{"biography":"${bio}","email":"${email}","external_url":"${link}","first_name":"${first_name}","gender":3,"phone_number":"","username":"${username}","_csrftoken":"${cookieJar.csrftoken}","_uid":"${cookieJar.ds_user_id}","device_id":"android-18c7682505872861","_uuid":"${head['X-IG-Device-ID']}"}`;
+        var body = `ig_sig_key_version=4&signed_body=8429b96afd2a02dd472616692424e8e5dbc394edc6cf49b1f2ace60273c08188.{"biography":"${bio}","email":"${cookie.email}","external_url":"${link}","first_name":"${cookie.first_name}","gender":3,"phone_number":"","username":"${cookie.username}","_csrftoken":"${cookie.csrftoken}","_uid":"${cookie.ds_user_id}","device_id":"android-18c7682505872861","_uuid":"${head['X-IG-Device-ID']}"}`;
         const ajax = await fetch('https://i.instagram.com/api/v1/accounts/edit_profile/', {'headers': head, 'timeout': 35000, 'body': body, 'method': 'POST'}).then((e) => {return e}).catch((e) => {return false});
         const resp = await ajax.json();
         return resp;
@@ -51,9 +51,9 @@ async function igEditBio(bio, link, email, first_name, username, cookieJar) {
     }
 }
 
-async function igFollowFollowers(target, cookieJar) {
-    header['x-csrftoken'] = cookieJar.csrftoken;
-    header['cookie'] = cookieJar.cookiejar;
+async function igFollowFollowers(target, cookie) {
+    header['x-csrftoken'] = cookie.csrftoken;
+    header['cookie'] = cookie.cookiejar;
 
     const start = await toolsFollow('followers', target);
     return start;
