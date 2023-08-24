@@ -108,8 +108,11 @@ const follow = async (a, b) => {
                         if (id.is_private === false) {
                             var task = [requestWeb('follow', {'target': id.pk})];
                             var [follow] = await Promise.all(task);
-                            follow = follow ? `[${count++}] Follow ${id.pk} ${chalk.bold.green('Success')}` : `[${count++}] Follow ${id.pk} ${chalk.bold.red('Failed')}`;
-                            console.log(chalk`{bold.white ${follow}}`);
+                            if (follow) {
+                                console.log(chalk`{bold.white [${count++}] Follow ${id.pk} {bold.green Success}}`);
+                            } else {
+                                console.log(chalk`{bold.white [${count++}] Follow ${id.pk} {bold.red Failed}}`);
+                            }
                         } else {
                             console.log(chalk`{bold.yellow Target ${id.pk} is Private, Skip}`);
                         }
