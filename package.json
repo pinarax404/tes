@@ -1,0 +1,20 @@
+{
+    "name": "Create_ig_Katalis",
+    "version": "1.0.0",
+    "description": "Tools Instagram By Katalis",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "Ardansyah",
+    "license": "ISC",
+    "dependencies": {
+        "chalk": "^2.4.2",
+        "form-data": "^4.0.0",
+        "fs": "0.0.1-security",
+        "inquirer": "^6.5.2",
+        "node-fetch": "^2.0.0"
+    }
+}
