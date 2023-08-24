@@ -1,3 +1,4 @@
+const fs = require('fs');
 const chalk = require('chalk');
 const fetch = require('node-fetch');
 const FormData 	= require('form-data');
@@ -10,7 +11,7 @@ const createAccount = async (a) => {
     console.log(chalk`{bold.white IP: {bold.green ${ip.ip}} | Country: {bold.green ${ip.country}}}`);
 
     await parseCookies('reset');
-    const openApp = await requestWeb('openApp');
+    await requestWeb('openApp');
     const first_name = await fullName();
     const email = await mailId();
     const username = await requestWeb('suggestuser', {'first_name': first_name});
@@ -23,13 +24,17 @@ const createAccount = async (a) => {
             if (code !== false) {
                 console.log(chalk`{bold.white Waiting Email Code: {bold.green ${code}}}`);
                 await requestWeb('create', {'name': first_name, 'username': username, 'password': password, 'email': email, 'code': code});
+                await parseCookies('reset');
+                await requestWeb('openApp');
+                await requestWeb('login', {'username': username, 'password': password});
                 const check = await requestWeb('igusername', {'username': username});
                 if (check !== false) {
+                    const cookies = await parseCookies('getstring');
+                    fs.appendFileSync('../storage/downloads/hasil_akun_ig.txt', username + '|' + password + '|' + email + '|' + cookies + '\n');
                     console.log(chalk`{bold.white ✔ Create: {bold.green Success}}`);
                     console.log(chalk`{bold.white ✔ Username: {bold.green ${username}}}`);
                     console.log(chalk`{bold.white ✔ Email: {bold.green ${email}}}`);
-                    const cookies = await parseCookies('getstring');
-                    return {'username': username, 'password': password, 'email': email, 'cookies': cookies};
+                    return true;
                 } else {
                     console.log(chalk`{bold.white ✘ Create: {bold.red Checkpoint}}`);
                     console.log(chalk`{bold.white ✘ Username: {bold.red ${username}}}`);
@@ -50,14 +55,13 @@ const createAccount = async (a) => {
     }
 }
 
-const uploadProfile = async (a) => {
-    await parseCookies('deserialize', a);
+const uploadProfile = async () => {
     var header = {
         'viewport-width': '601',
-        'x-csrftoken': a.split('csrftoken=')[1].split(';')[0],
+        'x-csrftoken': await parseCookies('getvalue', 'csrftoken'),
         'x-instagram-ajax': '1',
         'x-requested-with': 'XMLHttpRequest',
-        'cookie': a
+        'cookie': await parseCookies('getstring')
     };
 
     try {
@@ -77,30 +81,27 @@ const uploadProfile = async (a) => {
     }
 }
 
-const editBio = async (a, b) => {
-    await parseCookies('deserialize', a);
-    const edit = await requestApp('igSetBio', {'bio': b.bio, 'link': b.link});
+const editBio = async (a) => {
+    const edit = await requestApp('igSetBio', {'bio': a.bio, 'link': a.link});
     return edit;
 }
 
-const checktarget = async (a, b) => {
-    await parseCookies('deserialize', a);
-    if (isNaN(b.target)) {
-        const send = await requestWeb('igusername', {'username': b.target});
+const checktarget = async (a) => {
+    if (isNaN(a.target)) {
+        const send = await requestWeb('igusername', {'username': a.target});
         return send;
     } else {
-        const send = await requestWeb('iguid', {'uid': b.target});
+        const send = await requestWeb('iguid', {'uid': a.target});
         return send;
     }
 }
 
-const follow = async (a, b) => {
-    await parseCookies('deserialize', a);
+const follow = async (a) => {
     var count = 1;
     var next = '';
     try {
         do {
-            var grab = await requestWeb(b.mode, {'target': b.target, 'next': next});
+            var grab = await requestWeb(a.mode, {'target': a.target, 'next': next});
             if (grab !== false) {
                 var items = grab.users;
                 await Promise.all(
@@ -207,12 +208,24 @@ const requestWeb = async (a, b) => {
         }
     }
 
+    if (a === 'login') {
+        header['User-Agent'] = 'Instagram 121.0.0.29.119 Android (26/8.0.0; 480dpi; 1080x2076; samsung; SM-A530F; jackpotlte; samsungexynos7885; en_US; 185203708)';
+        const date = await datenow();
+        try {
+            const ajax = await fetch('https://www.instagram.com/api/v1/web/accounts/login/ajax/', {'headers': header, 'timeout': 40000, 'body': `enc_password=#PWD_INSTAGRAM_BROWSER:0:${date}:${b.password}&optIntoOneTap=false&queryParams={}&trustedDeviceRecords={}&username=${b.username}`, 'method': 'POST'}).then((e) => {return e}).catch((e) => {return false});
+            await parseCookies('update', ajax);
+            return true;
+        } catch (err) {
+            return false;
+        }
+    }
+
     if (a === 'igusername') {
         try {
             const ajax = await fetch(`https://www.instagram.com/api/v1/users/web_profile_info/?username=${b.username}`, {'headers': header, 'timeout': 35000, 'body': null, 'method': 'GET'}).then((e) => {return e}).catch((e) => {return false});
             const resp = await ajax.json();
             if (resp && resp.data && resp.data.user) {
-                return resp.data.user;
+                return {'is_private': resp.data.user.is_private, 'uid': resp.data.user.id};
             } else {
                 return false;
             }
@@ -226,7 +239,7 @@ const requestWeb = async (a, b) => {
             const ajax = await fetch(`https://www.instagram.com/api/v1/users/${b.uid}/info/`, {'headers': header, 'timeout': 35000, 'body': null, 'method': 'GET'}).then((e) => {return e}).catch((e) => {return false});
             const resp = await ajax.json();
             if (resp && resp.user) {
-                return resp.user;
+                return {'is_private': resp.user.is_private, 'uid': resp.user.pk};
             } else {
                 return false;
             }
@@ -379,4 +392,4 @@ const parseCookies = async (a, b) => {
     }
 }
 
-module.exports = { createAccount, uploadProfile, editBio, checktarget, follow };
+module.exports = { createAccount, uploadProfile, editBio, checktarget, follow, login };
