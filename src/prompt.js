@@ -8,7 +8,7 @@ const modeCreate = async () => {
         choices: [
             '[1] Create Kosongan',
             '[2] Create + Profile',
-            '[3] Create + Profile + Follow',
+            '[3] Create + Profile + Follow Followers',
         ],
     };
 
@@ -18,31 +18,8 @@ const modeCreate = async () => {
             return 1;
         } else if (mode === '[2] Create + Profile') {
             return 2;
-        } else if (mode === '[3] Create + Profile + Follow') {
+        } else if (mode === '[3] Create + Profile + Follow Followers') {
             return 3;
-        }
-    } catch (err) {
-        return false;
-    }
-}
-
-const modeAgent = async () => {
-    const form_agent = {
-        type: 'list',
-        name: 'userAgent',
-        message: 'Pilih User Agent',
-        choices: [
-            '[1] Default',
-            '[2] Random From System',
-        ],
-    };
-
-    try {
-        const { userAgent } = await inquirer.prompt(form_agent);
-        if (userAgent === '[1] Default') {
-            return 1;
-        } else if (userAgent === '[2] Random From System') {
-            return 2;
         }
     } catch (err) {
         return false;
@@ -51,8 +28,7 @@ const modeAgent = async () => {
 
 const prompt = async () => {
     const Create = await modeCreate();
-    const Agent = await modeAgent();
-    return {'modeCreate': Create, 'modeAgent': Agent};
+    return {'modeCreate': Create};
 }
 
 module.exports = { prompt };
