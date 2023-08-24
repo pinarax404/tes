@@ -57,7 +57,7 @@ async function toolsFollow(mode, target) {
 
 async function igGrab(mode, target, next) {
     try {
-        const ajax = await fetch(`https://www.instagram.com/api/v1/friendships/${target}/${mode}/?count=10&search_surface=follow_list_page&max_id=${next}`, {'headers': header, 'timeout': 35000, 'body': null, 'method': 'GET'}).then((e) => {return e}).catch((e) => {return false});
+        const ajax = await fetch(`https://www.instagram.com/api/v1/friendships/${target}/${mode}/?count=8&search_surface=follow_list_page&max_id=${next}`, {'headers': header, 'timeout': 35000, 'body': null, 'method': 'GET'}).then((e) => {return e}).catch((e) => {return false});
         const resp = await ajax.json();
         if (resp && resp.users) {
             return resp;
