@@ -392,4 +392,4 @@ const parseCookies = async (a, b) => {
     }
 }
 
-module.exports = { createAccount, uploadProfile, editBio, checktarget, follow, login };
+module.exports = { createAccount, uploadProfile, editBio, checktarget, follow };
