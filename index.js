@@ -12,7 +12,6 @@ if (!fs.existsSync('../storage/downloads/akun_target.txt')) {fs.appendFileSync('
 process.stdout.write('\033c');
 
 const create = async (modeCreate, modeAgent) => {
-    var count = 1;
     var cookieJar = await igCreate(modeCreate, modeAgent);
 
     if (cookieJar !== false) {
