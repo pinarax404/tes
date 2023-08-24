@@ -13,8 +13,8 @@ process.stdout.write('\033c');
 const main = async (a) => {
     const create = await createAccount(a);
     if (create !== false) {
+        fs.appendFileSync('../storage/downloads/hasil_akun_ig.txt', create.username + '|' + create.password + '|' + create.email + '|' + create.cookies + '\n');
         if (a === 1) {
-            fs.appendFileSync('../storage/downloads/hasil_akun_ig.txt', create.username + '|' + create.password + '|' + create.email + '|' + create.cookies + '\n');
             console.log(chalk`{bold.white ========================================}`);
             main(a);
         } else if (a === 2) {
