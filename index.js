@@ -12,7 +12,7 @@ process.stdout.write('\033c');
 
 const main = async (a) => {
     //const create = await createAccount(a);
-    const create = 'csrftoken=x71jGM0iNP3YehT4mJVD7Y3K7rWCzH4l;mid=ZOfUGAAAAAEP2rDKSSFyLNQzfdNV;ig_did=7FA97A8E-F711-4094-8F1D-5E27400B5CD6;ig_nrcb=1;rur="EAG\05461736265412\0541724450748:01f710a9f8ba7722316d88ab270be4ac4a9287fd2f8806a5764b4aa77a2cfce34791b8c3";ds_user_id=61736265412;sessionid=61736265412%3A3phEJr9lj2LzX8%3A28%3AAYcX-aUwcqylfVHCgbKhPq3EB1tR6c_2UomoaijrTg;';
+    const create = {'cookies': 'csrftoken=x71jGM0iNP3YehT4mJVD7Y3K7rWCzH4l;mid=ZOfUGAAAAAEP2rDKSSFyLNQzfdNV;ig_did=7FA97A8E-F711-4094-8F1D-5E27400B5CD6;ig_nrcb=1;rur="EAG\05461736265412\0541724450748:01f710a9f8ba7722316d88ab270be4ac4a9287fd2f8806a5764b4aa77a2cfce34791b8c3";ds_user_id=61736265412;sessionid=61736265412%3A3phEJr9lj2LzX8%3A28%3AAYcX-aUwcqylfVHCgbKhPq3EB1tR6c_2UomoaijrTg;'};
     if (create !== false) {
         //fs.appendFileSync('../storage/downloads/hasil_akun_ig.txt', create.username + '|' + create.password + '|' + create.email + '|' + create.cookies + '\n');
         if (a === 1) {
