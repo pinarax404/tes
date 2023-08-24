@@ -44,7 +44,7 @@ const mailCode = async (session) => {
             var mail_code = sbj.match(/\d+/)[0];
             return mail_code;
         } else {
-            return null;
+            return 'null';
         }
     } catch (err) {
         return false;
