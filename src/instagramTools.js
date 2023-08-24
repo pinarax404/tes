@@ -37,7 +37,7 @@ async function igEditBio(bio, link, email, first_name, username, cookieJar) {
         'X-IG-App-ID': '567067343352427',
         'X-IG-Device-ID': uuid(),
         'X-IG-Android-ID': 'android-18c7682505872861',
-        'cookie': cookieJar.cookiejar,
+        'cookie': cookieJar.cookieJar,
         'content-type': 'application/x-www-form-urlencoded'
     };
 
