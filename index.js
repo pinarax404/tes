@@ -33,13 +33,13 @@ const main = async (a) => {
             const link = await getLink();
             const target = await getTarget();
 
-            const uploadProfile = await uploadProfile(create.cookies);
+            const updateProfile = await uploadProfile(create.cookies);
             const updateBio = await editBio(create.cookies, {'bio': bio, 'link': link});
 
-            uploadProfile = uploadProfile ? `✔ Profile: ${chalk.bold.green('Success')}` : `✘ Profile: ${chalk.bold.red('Failed')}`;
+            updateProfile = updateProfile ? `✔ Profile: ${chalk.bold.green('Success')}` : `✘ Profile: ${chalk.bold.red('Failed')}`;
             updateBio = updateBio ? `✔ Bio: ${chalk.bold.green('Success')}` : `✘ Bio: ${chalk.bold.red('Failed')}`;
 
-            console.log(chalk`{bold.white ${uploadProfile}}`);
+            console.log(chalk`{bold.white ${updateProfile}}`);
             console.log(chalk`{bold.white ${updateBio}}`);
             console.log(chalk`{bold.white ========================================}`);
 
