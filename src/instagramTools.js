@@ -9,7 +9,7 @@ var header = {
     'x-ig-www-claim': '0',
     'x-instagram-ajax': '1008220018',
     'x-csrftoken': '',
-    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36',
+    'user-agent': 'Mozilla/5.0 (Linux; U; Android 2.3.6; fa-fa; GT-S5570I Build/GINGERBREAD) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1',
     'cookie': ''
 }
 
