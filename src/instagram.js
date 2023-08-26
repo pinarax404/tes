@@ -55,8 +55,8 @@ const createAccount = async (a) => {
             if (code !== false) {
                 console.log(chalk`{bold.white Waiting Email Code: {bold.green ${code}}}`);
                 await requestWeb('create', {'name': first_name, 'username': username, 'password': password, 'email': email, 'code': code});
-                await requestWeb('openApp');
-                await requestWeb('login', {'username': username, 'password': password});
+                //await requestWeb('openApp');
+                //await requestWeb('login', {'username': username, 'password': password});
                 const coki = await parseCookies('getstring');
                 console.log(coki);
                 const check = await requestWeb('igusername', {'username': username});
@@ -200,7 +200,6 @@ const requestWeb = async (a, b) => {
             const ajax = await fetch('https://www.instagram.com/api/v1/web/accounts/login/ajax/', {'headers': headerauth, 'timeout': 35000, 'body': `enc_password=#PWD_INSTAGRAM_BROWSER:0:0:${b.password}&optIntoOneTap=false&queryParams={"next":"/${b.username}/","source":"desktop_nav"}&trustedDeviceRecords={}&username=${b.username}`, 'method': 'POST'}).then((e) => {return e}).catch((e) => {return false});
             await parseCookies('update', ajax);
             const resp = await ajax.json();
-            console.log(resp);
             if (resp && resp.user === true && resp.userId && resp.authenticated === true && resp.status === 'ok') {
                 return true;
             } else {
