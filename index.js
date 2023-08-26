@@ -1,9 +1,11 @@
 const fs = require('fs');
 const chalk = require('chalk');
 const { prompt } = require('./src/prompt.js');
-const { createAccount, uploadProfile, editBio, checktarget, follow } = require('./src/instagram.js');
+const { createAccount } = require('./src/instagram.js');
 
-if (!fs.existsSync('../storage/downloads/hasil_akun_ig.txt')) {fs.appendFileSync('../storage/downloads/hasil_akun_ig.txt', '')};
+if (!fs.existsSync('../storage/downloads/hasil_akun_kosongan.txt')) {fs.appendFileSync('../storage/downloads/hasil_akun_kosongan.txt', '')};
+if (!fs.existsSync('../storage/downloads/hasil_akun_foto.txt')) {fs.appendFileSync('../storage/downloads/hasil_akun_foto.txt', '')};
+if (!fs.existsSync('../storage/downloads/hasil_akun_foto_follow.txt')) {fs.appendFileSync('../storage/downloads/hasil_akun_foto_follow.txt', '')};
 if (!fs.existsSync('../storage/downloads/bio_text.txt')) {fs.appendFileSync('../storage/downloads/bio_text.txt', '')};
 if (!fs.existsSync('../storage/downloads/bio_link.txt')) {fs.appendFileSync('../storage/downloads/bio_link.txt', '')};
 if (!fs.existsSync('../storage/downloads/akun_target.txt')) {fs.appendFileSync('../storage/downloads/akun_target.txt', '')};
@@ -11,68 +13,14 @@ if (!fs.existsSync('../storage/downloads/akun_target.txt')) {fs.appendFileSync('
 process.stdout.write('\033c');
 
 const main = async (a) => {
-    const create = await createAccount(a);
-    if (create !== false) {
-        if (a === 1) {
-            console.log(chalk`{bold.white ========================================}`);
+    const req = await createAccount(a);
+    if (req !== false) {
+        if (a === 1 || a === 2) {
             main(a);
-        } else if (a === 2) {
-            const upload = await uploadProfile(create.cookies);
-            if (upload === true) {
-                console.log(chalk`{bold.white ✔ Profile: {bold.green Success}}`);
-                console.log(chalk`{bold.white ========================================}`);
-                main(a);
-            } else {
-                console.log(chalk`{bold.white ✘ Profile: {bold.red Failed}}`);
-                console.log(chalk`{bold.white ========================================}`);
-                main(a);
-            }
         } else if (a === 3) {
-            const bio = await getBio();
-            const link = await getLink();
-            const target = await getTarget();
-
-            const updateProfile = await uploadProfile(create.cookies);
-            const updateBio = await editBio(create.cookies, {'bio': bio, 'link': link});
-
-            if (updateProfile === true) {
-                console.log(chalk`{bold.white ✔ Profile: {bold.green Success}}`);
-            } else {
-                console.log(chalk`{bold.white ✘ Profile: {bold.red Failed}}`);
-            }
-
-            if (updateBio === true) {
-                console.log(chalk`{bold.white ✔ Bio: {bold.green Success}}`);
-            } else {
-                console.log(chalk`{bold.white ✘ Bio: {bold.red Failed}}`);
-            }
-
-            console.log(chalk`{bold.white ========================================}`);
-
-            const checkTarget = await checktarget(create.cookies, {'target': target});
-            if (checkTarget !== false && checkTarget.is_private === false) {
-                const grab = await follow(create.cookies, {'mode': 'followers', 'target': target});
-                if (grab === true) {
-                    console.log(chalk`{bold.green Follow Complete}`);
-                    console.log(chalk`{bold.white ========================================}`);
-                    main(a);
-                } else {
-                    console.log(chalk`{bold.yellow Account Limit}`);
-                    console.log(chalk`{bold.white ========================================}`);
-                    main(a);
-                }
-            } else if (checkTarget !== false && checkTarget.is_private === true) {
-                console.log(chalk`{bold.yellow Target ${checkTarget} is Private}`);
-                console.log(chalk`{bold.white ========================================}`);
-                main(a);
-            } else {
-                console.log(chalk`{bold.red Auto Follow Failed}`);
-                console.log(chalk`{bold.white ========================================}`);
-                main(a);
-            }
+            
         }
     } else {
-        console.log(chalk`{bold.white ========================================}`);
         main(a);
     }
 }
