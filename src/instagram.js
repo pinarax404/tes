@@ -184,7 +184,7 @@ const requestWeb = async (a, b) => {
         header['User-Agent'] = agent('app');
         const date = await datenow();
         try {
-            const ajax = await fetch('https://www.instagram.com/api/v1/web/accounts/login/ajax/', {'headers': header, 'timeout': 35000, 'body': `enc_password=#PWD_INSTAGRAM_BROWSER:0:${date}:${b.password}&optIntoOneTap=false&queryParams={}&trustedDeviceRecords={}&username=${b.username}`, 'method': 'POST'}).then((e) => {return e}).catch((e) => {return false});
+            const ajax = await fetch('https://www.instagram.com/api/v1/web/accounts/login/ajax/', {'headers': header, 'timeout': 35000, 'body': `enc_password=#PWD_INSTAGRAM_BROWSER:0:0:${b.password}&optIntoOneTap=false&queryParams={"next":"${b.username}","source":"desktop_nav"}&trustedDeviceRecords={}&username=${b.username}`, 'method': 'POST'}).then((e) => {return e}).catch((e) => {return false});
             await parseCookies('update', ajax);
             const resp = await ajax.json();
             if (resp && resp.user === true && resp.userId && resp.authenticated === true && resp.status === 'ok') {
