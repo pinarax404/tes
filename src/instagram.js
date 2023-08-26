@@ -24,6 +24,8 @@ const createAccount = async (a) => {
             if (code !== false) {
                 console.log(chalk`{bold.white Waiting Email Code: {bold.green ${code}}}`);
                 await requestWeb('create', {'name': first_name, 'username': username, 'password': password, 'email': email, 'code': code});
+                await parseCookies('reset');
+                await requestWeb('openApp');
                 await requestWeb('login', {'username': username, 'password': password});
                 console.log(cookiejar);
                 const check = await requestWeb('igusername', {'username': username});
@@ -130,29 +132,34 @@ const follow = async (a) => {
     }
 }
 
-const requestWeb = async (a, b) => {
-    var header = {
-        'Host': 'www.instagram.com',
-        'Cookie': await parseCookies('getstring'),
-        'X-Requested-With': 'XMLHttpRequest',
-        'User-Agent': 'Mozilla/5.0 (Linux; Android 7.1.2; SM-G935FD) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Mobile Safari/537.36',
-        'Referer': 'https://www.instagram.com/',
-        'X-IG-App-ID': '1217981644879628',
-        'X-ASBD-ID': '129477',
-        'X-CSRFToken': await parseCookies('getvalue', 'csrftoken'),
-        'Origin': 'https://www.instagram.com',
-        'Sec-Fetch-Dest': 'empty',
-        'Sec-Fetch-Site': 'same-origin',
-        'X-Instagram-AJAX': '1008242111',
-        'Connection': 'keep-alive',
-        'X-IG-WWW-Claim': '0',
-        'Accept-Language': 'en-US,en;q=0.9',
-        'Accept': '*/*',
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Accept-Encoding': 'gzip, deflate, br',
-        'Sec-Fetch-Mode': 'cors'
-    };
+const requestheader = async (a) => {
+    if (a === 'web') {
+        return {
+            'Host': 'www.instagram.com',
+            'Cookie': await parseCookies('getstring'),
+            'X-Requested-With': 'XMLHttpRequest',
+            'User-Agent': 'Mozilla/5.0 (Linux; Android 7.1.2; SM-G935FD) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Mobile Safari/537.36',
+            'Referer': 'https://www.instagram.com/',
+            'X-IG-App-ID': '1217981644879628',
+            'X-ASBD-ID': '129477',
+            'X-CSRFToken': await parseCookies('getvalue', 'csrftoken'),
+            'Origin': 'https://www.instagram.com',
+            'Sec-Fetch-Dest': 'empty',
+            'Sec-Fetch-Site': 'same-origin',
+            'X-Instagram-AJAX': '1008242111',
+            'Connection': 'keep-alive',
+            'X-IG-WWW-Claim': '0',
+            'Accept-Language': 'en-US,en;q=0.9',
+            'Accept': '*/*',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Sec-Fetch-Mode': 'cors'
+        };
+    }
+}
 
+const requestWeb = async (a, b) => {
+    var header = await requestheader('web');
     if (a === 'openApp') {
         try {
             const ajax = await fetch('https://www.instagram.com/data/shared_data/', {'headers': header, 'timeout': 35000, 'body': null, 'method': 'GET'}).then((e) => {return e}).catch((e) => {return false});
@@ -208,11 +215,6 @@ const requestWeb = async (a, b) => {
     }
 
     if (a === 'login') {
-        header['Cookie'] = '';
-        header['X-CSRFToken'] = '';
-        await requestWeb('openApp');
-        header['Cookie'] = await parseCookies('getstring');
-        header['X-CSRFToken'] = await parseCookies('getvalue', 'csrftoken');
         const date = await datenow();
         try {
             const ajax = await fetch('https://www.instagram.com/api/v1/web/accounts/login/ajax/', {'headers': header, 'timeout': 40000, 'body': `enc_password=#PWD_INSTAGRAM_BROWSER:0:${date}:${b.password}&optIntoOneTap=true&queryParams={}&trustedDeviceRecords={}&username=${b.username}`, 'method': 'POST'}).then((e) => {return e}).catch((e) => {return false});
@@ -224,8 +226,14 @@ const requestWeb = async (a, b) => {
     }
 
     if (a === 'igusername') {
+        const ajax = await fetch(`https://i.instagram.com/api/v1/users/web_profile_info/?username=${b.username}`, {'headers': header, 'timeout': 35000, 'body': null, 'method': 'GET'}).then((e) => {return e}).catch((e) => {return false});
+        const resp = await ajax.json();
+        return resp;
+    }
+
+    if (a === 'igusernameee') {
         try {
-            const ajax = await fetch(`https://www.instagram.com/api/v1/users/web_profile_info/?username=${b.username}`, {'headers': header, 'timeout': 35000, 'body': null, 'method': 'GET'}).then((e) => {return e}).catch((e) => {return false});
+            const ajax = await fetch(`https://i.instagram.com/api/v1/users/web_profile_info/?username=${b.username}`, {'headers': header, 'timeout': 35000, 'body': null, 'method': 'GET'}).then((e) => {return e}).catch((e) => {return false});
             const resp = await ajax.json();
             if (resp && resp.data && resp.data.user) {
                 return {'is_private': resp.data.user.is_private, 'uid': resp.data.user.id};
