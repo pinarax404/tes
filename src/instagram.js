@@ -4,7 +4,7 @@ const FormData = require('form-data');
 const fetch = require('node-fetch');
 const { myIp, fullName, mailId, getCode, makeid, delay } = require('./index.js');
 
-var cookies = 'csrftoken=wMhxqRONQTzCcaPGmVb280hAIpkzlqW2;rur="PRN\05461734602757\0541724617844:01f7ca9e95b8f242a24e9bbb200978eaa0bccfd7593c505cb185ab0445885463fad57064";mid=ZOpg5wAAAAHNr_RXtOkGozqAnNb2;ds_user_id=61734602757;ig_did=6BAFF406-6C7D-4518-8CED-3E2AA723E802;sessionid=61734602757%3AZzbIrgcPjw4JRS%3A16%3AAYcKBHWE8mStQ4bXTlfZmJnmM8aQSyBA_HtaU7TfGA;';
+var cookies = '';
 
 const createAccount = async (a) => {
     const ip = await myIp();
@@ -116,6 +116,33 @@ const requestWeb = async (a, b) => {
         'cookie': cookies
     };
 
+    var appheader = {
+        'User-Agent': 'Instagram 121.0.0.29.119 Android (26/8.0.0; 480dpi; 1080x2076; samsung; SM-A530F; jackpotlte; samsungexynos7885; en_US; 185203708)',
+        'X-Ads-Opt-Out': '0',
+        'X-CM-Bandwidth-KBPS': '-1.000',
+        'X-CM-Latency': '-1.000',
+        'X-IG-App-Locale': 'en_US',
+        'X-IG-Device-Locale': 'en_US',
+        'X-Pigeon-Session-Id': getUUID(),
+        'X-Pigeon-Rawclienttime': datenow() + '.939',
+        'X-IG-Connection-Speed': '3656kbps',
+        'X-IG-Bandwidth-Speed-KBPS': '-1.000',
+        'X-IG-Bandwidth-TotalBytes-B': '0',
+        'X-IG-Bandwidth-TotalTime-MS': '0',
+        'X-IG-Extended-CDN-Thumbnail-Cache-Busting-Value': '1000',
+        'X-Bloks-Version-Id': '1b030ce63a06c25f3e4de6aaaf6802fe1e76401bc5ab6e5fb85ed6c2d333e0c7',
+        'X-MID': parseCookies('getvalue', 'mid'),
+        'X-IG-WWW-Claim': '0',
+        'X-Bloks-Is-Layout-RTL': 'false',
+        'X-IG-Connection-Type': 'WIFI',
+        'X-IG-Capabilities': '3brTvwE=',
+        'X-IG-App-ID': '567067343352427',
+        'X-IG-Device-ID': getUUID(),
+        'X-IG-Android-ID': 'android-18c7682505872861',
+        'cookie': cookies,
+        'content-type': 'application/x-www-form-urlencoded'
+    };
+
     if (a === 'openApp') {
         try {
             const ajax = await fetch('https://www.instagram.com/data/shared_data/', {'headers': {'content-type': 'application/x-www-form-urlencoded'}, 'timeout': 35000, 'body': null, 'method': 'GET'}).then((e) => {return e}).catch((e) => {return false});
@@ -161,6 +188,7 @@ const requestWeb = async (a, b) => {
     }
 
     if (a === 'create') {
+        authheader['User-Agent'] = 'Instagram 121.0.0.29.119 Android (26/8.0.0; 480dpi; 1080x2076; samsung; SM-A530F; jackpotlte; samsungexynos7885; en_US; 185203708)';
         try {
             const send = await fetch('https://www.instagram.com/api/v1/accounts/check_confirmation_code/', {'headers': authheader, 'timeout': 35000, 'body': `code=${b.code}&device_id=${parseCookies('getvalue', 'mid')}&email=${b.email}`, 'method': 'POST'}).then((e) => {return e}).catch((e) => {return false});
             const code = await send.json();
@@ -168,6 +196,20 @@ const requestWeb = async (a, b) => {
             await parseCookies('update', ajax);
             const resp = await ajax.json();
             return resp;
+        } catch (err) {
+            return false;
+        }
+    }
+
+    if (a === 'login') {
+        try {
+            const ajax = await fetch(`https://www.instagram.com/api/v1/users/web_profile_info/?username=${b.username}`, {'headers': authheader, 'timeout': 35000, 'body': null, 'method': 'GET'}).then((e) => {return e}).catch((e) => {return false});
+            const resp = await ajax.json();
+            if (resp && resp.data && resp.data.user && resp.data.user.id) {
+                return resp.data.user.id;
+            } else {
+                return false;
+            }
         } catch (err) {
             return false;
         }
@@ -197,6 +239,46 @@ const requestWeb = async (a, b) => {
             const resp = await ajax.json();
             if (resp && resp.changed_profile === true) {
                 return true;
+            } else {
+                return false;
+            }
+        } catch (err) {
+            return false;
+        }
+    }
+
+    if (a === 'updatebio') {
+        try {
+            const get = await fetch('https://i.instagram.com/api/v1/accounts/current_user/?edit=true', {'headers': appheader, 'timeout': 35000, 'body': null, 'method': 'GET'}).then((e) => {return e}).catch((e) => {return false});
+            const attr = await get.json();
+            const ajax = await fetch('https://i.instagram.com/api/v1/accounts/edit_profile/', {'headers': appheader, 'timeout': 35000, 'body': `ig_sig_key_version=4&signed_body=8429b96afd2a02dd472616692424e8e5dbc394edc6cf49b1f2ace60273c08188.{"biography":"${b.bio}","email":"${attr.user.email}","external_url":"${b.link}","first_name":"${attr.user.full_name}","gender":${attr.user.gender},"phone_number":"${attr.user.phone_number}","username":"${attr.user.username}","_csrftoken":"${parseCookies('getvalue', 'csrftoken')}","_uid":"${attr.user.pk}","device_id":"android-18c7682505872861","_uuid":"${appheader['X-IG-Device-ID']}"}`, 'method': 'POST'}).then((e) => {return e}).catch((e) => {return false});
+            const resp = await ajax.json();
+            return resp;
+        } catch (err) {
+            return false;
+        }
+    }
+
+    if (a === 'infousername') {
+        try {
+            const ajax = await fetch(`https://www.instagram.com/api/v1/users/web_profile_info/?username=${b.username}`, {'headers': polarisheader, 'timeout': 35000, 'body': null, 'method': 'GET'}).then((e) => {return e}).catch((e) => {return false});
+            const resp = await ajax.json();
+            if (resp && resp.data && resp.data.user && resp.data.user.id) {
+                return {'id': resp.data.user.id, 'is_private': resp.data.user.is_private};
+            } else {
+                return false;
+            }
+        } catch (err) {
+            return false;
+        }
+    }
+
+    if (a === 'infouid') {
+        try {
+            const ajax = await fetch(`https://i.instagram.com/api/v1/users/${b.uid}/info/`, {'headers': polarisheader, 'timeout': 35000, 'body': null, 'method': 'GET'}).then((e) => {return e}).catch((e) => {return false});
+            const resp = await ajax.json();
+            if (resp && resp.user && resp.user.pk) {
+                return {'id': resp.user.pk, 'is_private': resp.user.is_private};
             } else {
                 return false;
             }
@@ -247,4 +329,4 @@ const parseCookies = (a, b) => {
     }
 }
 
-module.exports = { createAccount };
+module.exports = { createAccount, requestWeb };
