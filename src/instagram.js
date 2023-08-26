@@ -188,7 +188,7 @@ const requestWeb = async (a, b) => {
     if (a === 'igusername') {
         headertools['X-CSRFToken'] = await parseCookies('getvalue', 'csrftoken');
         headertools['Cookie'] = await parseCookies('getstring');
-        const ajax = await fetch(`https://www.instagram.com/api/v1/users/web_profile_info/?username=${b.username}`, {'headers': headertools, 'timeout': 35000, 'body': null, 'method': 'GET'}).then((e) => {return e}).catch((e) => {return false});
+        const ajax = await fetch(`https://www.instagram.com/api/v1/users/web_profile_info/?username=${b.username}`, {'headers': headerauth, 'timeout': 35000, 'body': null, 'method': 'GET'}).then((e) => {return e}).catch((e) => {return false});
         const resp = await ajax.json();
         return resp;
     }
