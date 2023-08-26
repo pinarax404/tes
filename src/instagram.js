@@ -1,9 +1,10 @@
 const fs = require('fs');
 const chalk = require('chalk');
+const FormData = require('form-data');
 const fetch = require('node-fetch');
 const { myIp, fullName, mailId, getCode, makeid, delay } = require('./index.js');
 
-var cookies = '';
+var cookies = 'csrftoken=wMhxqRONQTzCcaPGmVb280hAIpkzlqW2;rur="PRN\05461734602757\0541724617844:01f7ca9e95b8f242a24e9bbb200978eaa0bccfd7593c505cb185ab0445885463fad57064";mid=ZOpg5wAAAAHNr_RXtOkGozqAnNb2;ds_user_id=61734602757;ig_did=6BAFF406-6C7D-4518-8CED-3E2AA723E802;sessionid=61734602757%3AZzbIrgcPjw4JRS%3A16%3AAYcKBHWE8mStQ4bXTlfZmJnmM8aQSyBA_HtaU7TfGA;';
 
 const createAccount = async (a) => {
     const ip = await myIp();
@@ -192,7 +193,7 @@ const requestWeb = async (a, b) => {
             const blob = await apiImage.buffer();
             const toSend = new FormData();
             toSend.append('profile_pic', blob, 'profilepic.jpg');
-            const ajax = await fetch('https://www.instagram.com/accounts/web_change_profile_picture/', {'headers': uploadheader, 'timeout': 35000, 'body': toSend, 'method': 'POST'}).then((e) => {return e}).catch((e) => {return false});
+            const ajax = await fetch('https://www.instagram.com/api/v1/web/accounts/web_change_profile_picture/', {'headers': uploadheader, 'timeout': 35000, 'body': toSend, 'method': 'POST'}).then((e) => {return e}).catch((e) => {return false});
             const resp = await ajax.json();
             if (resp && resp.changed_profile === true) {
                 return true;
@@ -246,4 +247,4 @@ const parseCookies = (a, b) => {
     }
 }
 
-module.exports = { createAccount };
+module.exports = { createAccount, requestWeb };
