@@ -34,7 +34,7 @@ var headertools = {
     'x-ig-app-id': '936619743392459',
     'x-ig-www-claim': '0',
     'x-instagram-ajax': '1008014958',
-    'User-Agent': '',
+    'User-Agent': 'Mozilla/5.0 (Linux; Android 7.1.2; SM-G935FD) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Mobile Safari/537.36',
     'Cookie': ''
 }
 
@@ -184,8 +184,9 @@ const requestWeb = async (a, b) => {
     }
 
     if (a === 'igusername') {
-        header['User-Agent'] = agent('web');
-        const ajax = await fetch(`https://www.instagram.com/api/v1/users/web_profile_info/?username=${b.username}`, {'headers': header, 'timeout': 35000, 'body': null, 'method': 'GET'}).then((e) => {return e}).catch((e) => {return false});
+        headertools['X-CSRFToken'] = await parseCookies('getvalue', 'X-CSRFToken');
+        headertools['Cookie'] = await parseCookies('getstring');
+        const ajax = await fetch(`https://www.instagram.com/api/v1/users/web_profile_info/?username=${b.username}`, {'headers': headertools, 'timeout': 35000, 'body': null, 'method': 'GET'}).then((e) => {return e}).catch((e) => {return false});
         const resp = await ajax.json();
         return resp;
     }
