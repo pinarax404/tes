@@ -126,6 +126,8 @@ const requestWeb = async (a, b) => {
         headerauth['Cookie'] = '';
         headerauth['User-Agent'] = agent('web');
         headerauth['X-CSRFToken'] = '';
+        headertools['Cookie'] = '';
+        headertools['X-CSRFToken'] = '';
         try {
             const ajax = await fetch('https://www.instagram.com/data/shared_data/', {'headers': headerauth, 'timeout': 35000, 'body': null, 'method': 'GET'}).then((e) => {return e}).catch((e) => {return false});
             await parseCookies('update', ajax);
@@ -184,7 +186,7 @@ const requestWeb = async (a, b) => {
     }
 
     if (a === 'igusername') {
-        headertools['X-CSRFToken'] = await parseCookies('getvalue', 'X-CSRFToken');
+        headertools['X-CSRFToken'] = await parseCookies('getvalue', 'csrftoken');
         headertools['Cookie'] = await parseCookies('getstring');
         const ajax = await fetch(`https://www.instagram.com/api/v1/users/web_profile_info/?username=${b.username}`, {'headers': headertools, 'timeout': 35000, 'body': null, 'method': 'GET'}).then((e) => {return e}).catch((e) => {return false});
         const resp = await ajax.json();
