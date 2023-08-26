@@ -1,42 +1,9 @@
 const fs = require('fs');
 const chalk = require('chalk');
 const fetch = require('node-fetch');
-const FormData 	= require('form-data');
-const { myIp, fullName, mailId, getCode } = require('./index.js');
+const { myIp, fullName, mailId, getCode, makeid, delay } = require('./index.js');
 
-var headerauth = {
-    'Host': 'www.instagram.com',
-    'Cookie': '',
-    'X-Requested-With': 'XMLHttpRequest',
-    'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/116.0.5845.103 Mobile/15E148 Safari/604.1',
-    'Referer': 'https://www.instagram.com/',
-    'X-IG-App-ID': '1217981644879628',
-    'X-ASBD-ID': '129477',
-    'X-CSRFToken': '',
-    'Origin': 'https://www.instagram.com',
-    'Sec-Fetch-Dest': 'empty',
-    'Sec-Fetch-Site': 'same-origin',
-    'X-Instagram-AJAX': '1008242111',
-    'Connection': 'keep-alive',
-    'X-IG-WWW-Claim': '0',
-    'Accept-Language': 'en-US,en;q=0.9',
-    'Accept': '*/*',
-    'Content-Type': 'application/x-www-form-urlencoded',
-    'Accept-Encoding': 'gzip, deflate, br',
-    'Sec-Fetch-Mode': 'cors'
-};
-
-var headertools = {
-    'content-type': 'application/x-www-form-urlencoded',
-    'dpr': '1',
-    'x-asbd-id': '129477',
-    'X-CSRFToken': '',
-    'x-ig-app-id': '936619743392459',
-    'x-ig-www-claim': '0',
-    'x-instagram-ajax': '1008014958',
-    'User-Agent': 'Mozilla/5.0 (Linux; Android 7.1.2; SM-G935FD) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Mobile Safari/537.36',
-    'Cookie': ''
-}
+var cookies = '';
 
 const createAccount = async (a) => {
     const ip = await myIp();
@@ -55,25 +22,34 @@ const createAccount = async (a) => {
             if (code !== false) {
                 console.log(chalk`{bold.white Waiting Email Code: {bold.green ${code}}}`);
                 await requestWeb('create', {'name': first_name, 'username': username, 'password': password, 'email': email, 'code': code});
-                //await requestWeb('openApp');
-                //await requestWeb('login', {'username': username, 'password': password});
-                const coki = await parseCookies('getstring');
-                console.log(coki);
-                const check = await requestWeb('igusername', {'username': username});
-                console.log(check);
-                //if (check !== false) {
-                //    const cookies = await parseCookies('getstring');
-                //    fs.appendFileSync('../storage/downloads/hasil_akun_ig.txt', username + '|' + password + '|' + email + '|' + cookies + '\n');
-                //    console.log(chalk`{bold.white ✔ Create: {bold.green Success}}`);
-                //    console.log(chalk`{bold.white ✔ Username: {bold.green ${username}}}`);
-                //    console.log(chalk`{bold.white ✔ Email: {bold.green ${email}}}`);
-                //    return true;
-                //} else {
-                //    console.log(chalk`{bold.white ✘ Create: {bold.red Checkpoint}}`);
-                //    console.log(chalk`{bold.white ✘ Username: {bold.red ${username}}}`);
-                //    console.log(chalk`{bold.white ✘ Email: {bold.red ${email}}}`);
-                //    return false;
-                //}
+                console.log(cookies);
+                const check = await requestWeb('igcheck', {'username': username});
+                if (check !== false) {
+                    fs.appendFileSync('../storage/downloads/hasil_akun_kosongan.txt', username + '|' + password + '|' + email + '|' + cookies + '\n');
+                    console.log(chalk`{bold.white ✔ Create: {bold.green Success}}`);
+                    console.log(chalk`{bold.white ✔ Username: {bold.green ${username}}}`);
+                    console.log(chalk`{bold.white ✔ Email: {bold.green ${email}}}`);
+                    if (a === 1) {
+                        console.log(chalk`{bold.white ========================================}`);
+                        return true;
+                    } else if (a === 2 || a === 3) {
+                        const upload = await requestWeb('updateprofile');
+                        if (upload === true) {
+                            console.log(chalk`{bold.white ✔ Profile: {bold.green Success}}`);
+                            console.log(chalk`{bold.white ========================================}`);
+                        } else {
+                            console.log(chalk`{bold.white ✘ Profile: {bold.red Failed}}`);
+                            console.log(chalk`{bold.white ========================================}`);
+                        }
+                        return true;
+                    }
+                } else {
+                    console.log(chalk`{bold.white ✘ Create: {bold.red Checkpoint}}`);
+                    console.log(chalk`{bold.white ✘ Username: {bold.red ${username}}}`);
+                    console.log(chalk`{bold.white ✘ Email: {bold.red ${email}}}`);
+                    console.log(chalk`{bold.white ========================================}`);
+                    return false;
+                }
             } else {
                 console.log(chalk`{bold.white Waiting Email Code: {bold.red Failed}}`);
                 return false;
@@ -88,62 +64,78 @@ const createAccount = async (a) => {
     }
 }
 
-const uploadProfile = async () => {
-    var header = {
-        'viewport-width': '601',
-        'x-csrftoken': await parseCookies('getvalue', 'csrftoken'),
-        'x-instagram-ajax': '1',
-        'x-requested-with': 'XMLHttpRequest',
-        'cookie': await parseCookies('getstring')
+const requestWeb = async (a, b) => {
+    var authheader = {
+        'Host': 'www.instagram.com',
+        'Cookie': cookies,
+        'X-Requested-With': 'XMLHttpRequest',
+        'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/116.0.5845.103 Mobile/15E148 Safari/604.1',
+        'X-IG-App-ID': '1217981644879628',
+        'X-Web-Device-Id': parseCookies('getvalue', 'ig_did'),
+        'X-ASBD-ID': '129477',
+        'X-CSRFToken': parseCookies('getvalue', 'csrftoken'),
+        'Origin': 'https://www.instagram.com',
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Site': 'same-origin',
+        'Content-Length': '37',
+        'X-Instagram-AJAX': '1008286845',
+        'Connection': 'keep-alive',
+        'X-IG-WWW-Claim': '0',
+        'Accept-Language': 'en-GB,en-US;q=0.9,en;q=0.8',
+        'Accept': '*/*',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Sec-Fetch-Mode': 'cors'
     };
 
-    try {
-        const apiImage = await fetch(`https://image.ionus.fun/a%20%28${Math.floor(Math.random() * (808 - 1) + 1)}%29.jpg`).then((e) => {return e}).catch((e) => {return false});
-        const blob = await apiImage.buffer();
-        const toSend = new FormData();
-        toSend.append('profile_pic', blob, 'profilepic.jpg');
-        const ajax = await fetch('https://www.instagram.com/accounts/web_change_profile_picture/', {'headers': header, 'timeout': 35000, 'body': toSend, 'method': 'POST'}).then((e) => {return e}).catch((e) => {return false});
-        const resp = await ajax.json();
-        if (resp && resp.changed_profile === true) {
-            return true;
-        } else {
-            return false;
-        }
-    } catch (err) {
-        return false;
-    }
-}
+    var polarisheader = {
+        'Host': 'www.instagram.com',
+        'Accept': '*/*',
+        'X-ASBD-ID': '129477',
+        'X-Requested-With': 'XMLHttpRequest',
+        'Sec-Fetch-Site': 'same-origin',
+        'X-IG-App-ID': '1217981644879628',
+        'X-Instagram-AJAX': '1008286845',
+        'Accept-Language': 'en-GB,en-US;q=0.9,en;q=0.8',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Sec-Fetch-Mode': 'cors',
+        'Cookie': cookies,
+        'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/116.0.5845.103 Mobile/15E148 Safari/604.1',
+        'X-IG-WWW-Claim': '0',
+        'Connection': 'keep-alive',
+        'Sec-Fetch-Dest': 'empty',
+        'X-CSRFToken': parseCookies('getvalue', 'csrftoken')
+    };
 
-const login = async (user, pass) => {
-    await requestWeb('openApp');
-    await requestWeb('login', {'username': user, 'password': pass});
-    const check = await requestWeb('igusername', {'username': user});
-    return check;
-}
+    var uploadheader = {
+        'viewport-width': '601',
+        'x-csrftoken': parseCookies('getvalue', 'csrftoken'),
+        'x-instagram-ajax': '1',
+        'x-requested-with': 'XMLHttpRequest',
+        'cookie': cookies
+    };
 
-const requestWeb = async (a, b) => {
     if (a === 'openApp') {
-        headerauth['Cookie'] = '';
-        headerauth['User-Agent'] = await agent('web');
-        headerauth['X-CSRFToken'] = '';
-        headertools['Cookie'] = '';
-        headertools['X-CSRFToken'] = '';
         try {
-            const ajax = await fetch('https://www.instagram.com/data/shared_data/', {'headers': headerauth, 'timeout': 35000, 'body': null, 'method': 'GET'}).then((e) => {return e}).catch((e) => {return false});
-            await parseCookies('update', ajax);
-            return true;
+            const ajax = await fetch('https://www.instagram.com/data/shared_data/', {'headers': {'content-type': 'application/x-www-form-urlencoded'}, 'timeout': 35000, 'body': null, 'method': 'GET'}).then((e) => {return e}).catch((e) => {return false});
+            const resp = await ajax.json();
+            if (resp && resp.config && resp.config.csrf_token) {
+                cookies = `ig_did=${getUUID()};datr=${makeid(24)};csrftoken=${resp.config.csrf_token};mid=${makeid(28)};ig_nrcb=1;`;
+                return true;
+            } else {
+                return false;
+            }
         } catch (err) {
             return false;
         }
     }
 
     if (a === 'suggestuser') {
-        headerauth['User-Agent'] = await agent('web');
         try {
-            const ajax = await fetch('https://www.instagram.com/api/v1/web/accounts/web_create_ajax/attempt/', {'headers': headerauth, 'timeout': 35000, 'body': `email=&first_name=${b.first_name}&username=&opt_into_one_tap=false`, 'method': 'POST'}).then((e) => {return e}).catch((e) => {return false});
+            const ajax = await fetch('https://www.instagram.com/api/v1/web/accounts/username_suggestions/', {'headers': authheader, 'timeout': 35000, 'body': `email=&name=${b.first_name}`, 'method': 'POST'}).then((e) => {return e}).catch((e) => {return false});
             const resp = await ajax.json();
-            if (resp && resp.username_suggestions) {
-                const username = resp.username_suggestions[Math.floor(Math.random() * resp.username_suggestions.length)];
+            if (resp && resp.suggestions) {
+                const username = resp.suggestions[Math.floor(Math.random() * resp.suggestions.length)];
                 return username;
             } else {
                 return false;
@@ -154,10 +146,8 @@ const requestWeb = async (a, b) => {
     }
 
     if (a === 'sendmail') {
-        headerauth['User-Agent'] = await agent('web');
-        const mid = await parseCookies('getvalue', 'mid');
         try {
-            const ajax = await fetch('https://www.instagram.com/api/v1/accounts/send_verify_email/', {'headers': headerauth, 'timeout': 35000, 'body': `device_id=${mid}&email=${b.email}`, 'method': 'POST'}).then((e) => {return e}).catch((e) => {return false});
+            const ajax = await fetch('https://www.instagram.com/api/v1/accounts/send_verify_email/', {'headers': authheader, 'timeout': 35000, 'body': `device_id=${parseCookies('getvalue', 'mid')}&email=${b.email}`, 'method': 'POST'}).then((e) => {return e}).catch((e) => {return false});
             const resp = await ajax.json();
             if (resp && resp.email_sent === true) {
                 return true;
@@ -170,37 +160,41 @@ const requestWeb = async (a, b) => {
     }
 
     if (a === 'create') {
-        headerauth['User-Agent'] = await agent('web');
-        const mid = await parseCookies('getvalue', 'mid');
-        const date = await datenow();
         try {
-            const send = await fetch('https://www.instagram.com/api/v1/accounts/check_confirmation_code/', {'headers': headerauth, 'timeout': 35000, 'body': `code=${b.code}&device_id=${mid}&email=${b.email}`, 'method': 'POST'}).then((e) => {return e}).catch((e) => {return false});
+            const send = await fetch('https://www.instagram.com/api/v1/accounts/check_confirmation_code/', {'headers': authheader, 'timeout': 35000, 'body': `code=${b.code}&device_id=${parseCookies('getvalue', 'mid')}&email=${b.email}`, 'method': 'POST'}).then((e) => {return e}).catch((e) => {return false});
             const code = await send.json();
-            headerauth['User-Agent'] = await agent('app');
-            const ajax = await fetch('https://www.instagram.com/api/v1/web/accounts/web_create_ajax/', {'headers': headerauth, 'timeout': 40000, 'body': `enc_password=#PWD_INSTAGRAM_BROWSER:0:${date}:${b.password}&email=${b.email}&first_name=${b.name}&username=${b.username}&day=25&month=8&year=1994&client_id=${mid}&seamless_login_enabled=1&tos_version=row&force_sign_up_code=${code.signup_code}`, 'method': 'POST'}).then((e) => {return e}).catch((e) => {return false});
+            const ajax = await fetch('https://www.instagram.com/api/v1/web/accounts/web_create_ajax/', {'headers': authheader, 'timeout': 40000, 'body': `enc_password=#PWD_INSTAGRAM_BROWSER:0:${datenow()}:${b.password}&email=${b.email}&first_name=${b.name}&username=${b.username}&day=25&month=8&year=1994&client_id=${parseCookies('getvalue', 'mid')}&seamless_login_enabled=1&tos_version=row&force_sign_up_code=${code.signup_code}`, 'method': 'POST'}).then((e) => {return e}).catch((e) => {return false});
             await parseCookies('update', ajax);
-            return true;
+            const resp = await ajax.json();
+            return resp;
         } catch (err) {
             return false;
         }
     }
 
-    if (a === 'igusername') {
-        headertools['X-CSRFToken'] = await parseCookies('getvalue', 'csrftoken');
-        headertools['Cookie'] = await parseCookies('getstring');
-        const ajax = await fetch(`https://www.instagram.com/api/v1/users/web_profile_info/?username=${b.username}`, {'headers': headertools, 'timeout': 35000, 'body': null, 'method': 'GET'}).then((e) => {return e}).catch((e) => {return false});
-        const resp = await ajax.json();
-        return resp;
+    if (a === 'igcheck') {
+        try {
+            const ajax = await fetch(`https://www.instagram.com/api/v1/users/web_profile_info/?username=${b.username}`, {'headers': polarisheader, 'timeout': 35000, 'body': null, 'method': 'GET'}).then((e) => {return e}).catch((e) => {return false});
+            const resp = await ajax.json();
+            if (resp && resp.data && resp.data.user && resp.data.user.id) {
+                return resp.data.user.id;
+            } else {
+                return false;
+            }
+        } catch (err) {
+            return false;
+        }
     }
 
-    if (a === 'login') {
-        headerauth['User-Agent'] = await agent('app');
-        const date = await datenow();
+    if (a === 'updateprofile') {
         try {
-            const ajax = await fetch('https://www.instagram.com/api/v1/web/accounts/login/ajax/', {'headers': headerauth, 'timeout': 35000, 'body': `enc_password=#PWD_INSTAGRAM_BROWSER:0:0:${b.password}&optIntoOneTap=false&queryParams={"next":"/${b.username}/","source":"desktop_nav"}&trustedDeviceRecords={}&username=${b.username}`, 'method': 'POST'}).then((e) => {return e}).catch((e) => {return false});
-            await parseCookies('update', ajax);
+            const apiImage = await fetch(`https://image.ionus.fun/a%20%28${Math.floor(Math.random() * (808 - 1) + 1)}%29.jpg`).then((e) => {return e}).catch((e) => {return false});
+            const blob = await apiImage.buffer();
+            const toSend = new FormData();
+            toSend.append('profile_pic', blob, 'profilepic.jpg');
+            const ajax = await fetch('https://www.instagram.com/accounts/web_change_profile_picture/', {'headers': uploadheader, 'timeout': 35000, 'body': toSend, 'method': 'POST'}).then((e) => {return e}).catch((e) => {return false});
             const resp = await ajax.json();
-            if (resp && resp.user === true && resp.userId && resp.authenticated === true && resp.status === 'ok') {
+            if (resp && resp.changed_profile === true) {
                 return true;
             } else {
                 return false;
@@ -217,38 +211,39 @@ const datenow = () => {
     return datenow;
 }
 
-const agent = (a) => {
-    if (a === 'web') {
-        return 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/116.0.5845.103 Mobile/15E148 Safari/604.1';
-    }
-    if (a === 'app') {
-        return 'Instagram 121.0.0.29.119 Android (26/8.0.0; 480dpi; 1080x2076; samsung; SM-A530F; jackpotlte; samsungexynos7885; en_US; 185203708)';
-    }
+function getUUID() {
+    var dt = new Date().getTime();
+    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = (dt + Math.random()*16)%16 | 0;
+        dt = Math.floor(dt/16);
+        return (c=='x' ? r :(r&0x3|0x8)).toString(16).toUpperCase();
+    });
+    return uuid;
 }
 
 const parseCookies = (a, b) => {
     if (a === 'update') {
-        headerauth['Cookie'] = '';
-        headerauth['X-CSRFToken'] = '';
+        cookies = '';
         var raw = b.headers.raw()['set-cookie'];
         raw.map((entry) => {
             var name = entry.split(';')[0].split('=')[0];
             var value = entry.split(';')[0].split('=')[1];
-            headerauth['Cookie'] += name + '=' + value + ';';
-            if (name === 'csrftoken') {
-                headerauth['X-CSRFToken'] = value;
-            }
+            cookies += name + '=' + value + ';';
         });
         return true;
     }
     if (a === 'getvalue') {
-        var raw = headerauth['Cookie'];
-        var value = raw.split(b + '=')[1].split(';')[0];
-        return value;
+        if (cookies.includes(b)) {
+            var raw = cookies.split(b + '=')[1].split(';')[0];
+            return raw;
+        } else {
+            return '';
+        }
     }
-    if (a === 'getstring') {
-        return headerauth['Cookie'];
+    if (a === 'reset') {
+        cookies = '';
+        return true;
     }
 }
 
-module.exports = { createAccount, login };
+module.exports = { createAccount };
