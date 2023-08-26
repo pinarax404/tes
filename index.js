@@ -3,9 +3,7 @@ const chalk = require('chalk');
 const { prompt } = require('./src/prompt.js');
 const { createAccount } = require('./src/instagram.js');
 
-if (!fs.existsSync('../storage/downloads/hasil_akun_kosongan.txt')) {fs.appendFileSync('../storage/downloads/hasil_akun_kosongan.txt', '')};
-if (!fs.existsSync('../storage/downloads/hasil_akun_foto.txt')) {fs.appendFileSync('../storage/downloads/hasil_akun_foto.txt', '')};
-if (!fs.existsSync('../storage/downloads/hasil_akun_foto_follow.txt')) {fs.appendFileSync('../storage/downloads/hasil_akun_foto_follow.txt', '')};
+if (!fs.existsSync('../storage/downloads/hasil_akun_create.txt')) {fs.appendFileSync('../storage/downloads/hasil_akun_create.txt', '')};
 if (!fs.existsSync('../storage/downloads/bio_text.txt')) {fs.appendFileSync('../storage/downloads/bio_text.txt', '')};
 if (!fs.existsSync('../storage/downloads/bio_link.txt')) {fs.appendFileSync('../storage/downloads/bio_link.txt', '')};
 if (!fs.existsSync('../storage/downloads/akun_target.txt')) {fs.appendFileSync('../storage/downloads/akun_target.txt', '')};
