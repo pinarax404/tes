@@ -124,7 +124,7 @@ const login = async (user, pass) => {
 const requestWeb = async (a, b) => {
     if (a === 'openApp') {
         headerauth['Cookie'] = '';
-        headerauth['User-Agent'] = agent('web');
+        headerauth['User-Agent'] = await agent('web');
         headerauth['X-CSRFToken'] = '';
         headertools['Cookie'] = '';
         headertools['X-CSRFToken'] = '';
@@ -138,7 +138,7 @@ const requestWeb = async (a, b) => {
     }
 
     if (a === 'suggestuser') {
-        headerauth['User-Agent'] = agent('web');
+        headerauth['User-Agent'] = await agent('web');
         try {
             const ajax = await fetch('https://www.instagram.com/api/v1/web/accounts/web_create_ajax/attempt/', {'headers': headerauth, 'timeout': 35000, 'body': `email=&first_name=${b.first_name}&username=&opt_into_one_tap=false`, 'method': 'POST'}).then((e) => {return e}).catch((e) => {return false});
             const resp = await ajax.json();
@@ -154,7 +154,7 @@ const requestWeb = async (a, b) => {
     }
 
     if (a === 'sendmail') {
-        headerauth['User-Agent'] = agent('web');
+        headerauth['User-Agent'] = await agent('web');
         const mid = await parseCookies('getvalue', 'mid');
         try {
             const ajax = await fetch('https://www.instagram.com/api/v1/accounts/send_verify_email/', {'headers': headerauth, 'timeout': 35000, 'body': `device_id=${mid}&email=${b.email}`, 'method': 'POST'}).then((e) => {return e}).catch((e) => {return false});
@@ -170,13 +170,13 @@ const requestWeb = async (a, b) => {
     }
 
     if (a === 'create') {
-        headerauth['User-Agent'] = agent('web');
+        headerauth['User-Agent'] = await agent('web');
         const mid = await parseCookies('getvalue', 'mid');
         const date = await datenow();
         try {
             const send = await fetch('https://www.instagram.com/api/v1/accounts/check_confirmation_code/', {'headers': headerauth, 'timeout': 35000, 'body': `code=${b.code}&device_id=${mid}&email=${b.email}`, 'method': 'POST'}).then((e) => {return e}).catch((e) => {return false});
             const code = await send.json();
-            headerauth['User-Agent'] = agent('app');
+            headerauth['User-Agent'] = await agent('app');
             const ajax = await fetch('https://www.instagram.com/api/v1/web/accounts/web_create_ajax/', {'headers': headerauth, 'timeout': 40000, 'body': `enc_password=#PWD_INSTAGRAM_BROWSER:0:${date}:${b.password}&email=${b.email}&first_name=${b.name}&username=${b.username}&day=25&month=8&year=1994&client_id=${mid}&seamless_login_enabled=1&tos_version=row&force_sign_up_code=${code.signup_code}`, 'method': 'POST'}).then((e) => {return e}).catch((e) => {return false});
             await parseCookies('update', ajax);
             return true;
@@ -194,7 +194,7 @@ const requestWeb = async (a, b) => {
     }
 
     if (a === 'login') {
-        headerauth['User-Agent'] = agent('app');
+        headerauth['User-Agent'] = await agent('app');
         const date = await datenow();
         try {
             const ajax = await fetch('https://www.instagram.com/api/v1/web/accounts/login/ajax/', {'headers': headerauth, 'timeout': 35000, 'body': `enc_password=#PWD_INSTAGRAM_BROWSER:0:0:${b.password}&optIntoOneTap=false&queryParams={"next":"/${b.username}/","source":"desktop_nav"}&trustedDeviceRecords={}&username=${b.username}`, 'method': 'POST'}).then((e) => {return e}).catch((e) => {return false});
