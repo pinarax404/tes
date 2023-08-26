@@ -26,7 +26,7 @@ const createAccount = async (a) => {
                 console.log(cookies);
                 const check = await requestWeb('igcheck', {'username': username});
                 if (check !== false) {
-                    fs.appendFileSync('../storage/downloads/hasil_akun_kosongan.txt', username + '|' + password + '|' + email + '|' + cookies + '\n');
+                    fs.appendFileSync('../storage/downloads/hasil_akun_create.txt', username + '|' + password + '|' + email + '|' + cookies + '\n');
                     console.log(chalk`{bold.white ✔ Create: {bold.green Success}}`);
                     console.log(chalk`{bold.white ✔ Username: {bold.green ${username}}}`);
                     console.log(chalk`{bold.white ✔ Email: {bold.green ${email}}}`);
@@ -247,4 +247,4 @@ const parseCookies = (a, b) => {
     }
 }
 
-module.exports = { createAccount, requestWeb };
+module.exports = { createAccount };
