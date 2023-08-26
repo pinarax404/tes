@@ -4,9 +4,7 @@ const fetch = require('node-fetch');
 const FormData 	= require('form-data');
 const { myIp, fullName, mailId, getCode } = require('./index.js');
 
-var cookiejar = {};
-
-var header = {
+var headerrr = {
     'Host': 'www.instagram.com',
     'Cookie': '',
     'X-Requested-With': 'XMLHttpRequest',
@@ -27,6 +25,18 @@ var header = {
     'Accept-Encoding': 'gzip, deflate, br',
     'Sec-Fetch-Mode': 'cors'
 };
+
+var header = {
+    'content-type': 'application/x-www-form-urlencoded',
+    'dpr': '1',
+    'x-asbd-id': '129477',
+    'X-CSRFToken': '',
+    'x-ig-app-id': '936619743392459',
+    'x-ig-www-claim': '0',
+    'x-instagram-ajax': '1008014958',
+    'User-Agent': '',
+    'Cookie': ''
+}
 
 const createAccount = async (a) => {
     const ip = await myIp();
