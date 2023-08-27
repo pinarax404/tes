@@ -338,7 +338,7 @@ const requestWeb = async (a, b) => {
 
     if (a === 'followers') {
         try {
-            const ajax = await fetch(`https://www.instagram.com/api/v1/friendships/${b.uid}/followers/?count=8&search_surface=follow_list_page&max_id=${b.next}`, {'headers': polarisheader, 'timeout': 35000, 'body': null, 'method': 'GET'}).then((e) => {return e}).catch((e) => {return false});
+            const ajax = await fetch(`https://www.instagram.com/api/v1/friendships/${b.uid}/followers/?count=5&search_surface=follow_list_page&max_id=${b.next}`, {'headers': polarisheader, 'timeout': 35000, 'body': null, 'method': 'GET'}).then((e) => {return e}).catch((e) => {return false});
             const resp = await ajax.json();
             if (resp && resp.users) {
                 return resp;
@@ -352,7 +352,7 @@ const requestWeb = async (a, b) => {
 
     if (a === 'following') {
         try {
-            const ajax = await fetch(`https://www.instagram.com/api/v1/friendships/${b.uid}/following/?count=8&search_surface=follow_list_page&max_id=${b.next}`, {'headers': polarisheader, 'timeout': 35000, 'body': null, 'method': 'GET'}).then((e) => {return e}).catch((e) => {return false});
+            const ajax = await fetch(`https://www.instagram.com/api/v1/friendships/${b.uid}/following/?count=5&search_surface=follow_list_page&max_id=${b.next}`, {'headers': polarisheader, 'timeout': 35000, 'body': null, 'method': 'GET'}).then((e) => {return e}).catch((e) => {return false});
             const resp = await ajax.json();
             if (resp && resp.users) {
                 return resp;
