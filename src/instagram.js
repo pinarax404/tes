@@ -23,7 +23,7 @@ const createAccount = async (a) => {
             if (code !== false) {
                 console.log(chalk`{bold.white Waiting Email Code: {bold.green ${code}}}`);
                 await requestWeb('create', {'name': first_name, 'username': username, 'password': password, 'email': email, 'code': code});
-                await requestWeb('login', {'username': username, 'password': password});
+                await requestWeb('login', {'api': 'web', 'username': username, 'password': password});
                 const check = await requestWeb('igcheck', {'username': username});
                 if (check !== false) {
                     fs.appendFileSync('../storage/downloads/hasil_akun_create.txt', username + '|' + password + '|' + email + '|' + cookies + '\n');
@@ -42,7 +42,7 @@ const createAccount = async (a) => {
                             console.log(chalk`{bold.white ✘ Profile: {bold.red Failed}}`);
                             console.log(chalk`{bold.white ========================================}`);
                         }
-                        return true;
+                        return {'user': username, 'password': password};
                     }
                 } else {
                     console.log(chalk`{bold.white ✘ Create: {bold.red Checkpoint}}`);
@@ -63,6 +63,13 @@ const createAccount = async (a) => {
         console.log(chalk`{bold.red Failed While Generating Cookies}`);
         return false;
     }
+}
+
+const setbio = async (a, b) => {
+    await requestWeb('openApp');
+    await requestWeb('login', {'api': 'app', 'username': b.username, 'password': b.password});
+    const setbio = await requestWeb('updatebio', {'bio': b.bio, 'link': b.link});
+    return setbio;
 }
 
 const followtarget = async (a, b) => {
@@ -245,8 +252,10 @@ const requestWeb = async (a, b) => {
     }
 
     if (a === 'login') {
-        authheader['User-Agent'] = 'Instagram 121.0.0.29.119 Android (26/8.0.0; 480dpi; 1080x2076; samsung; SM-A530F; jackpotlte; samsungexynos7885; en_US; 185203708)';
-        authheader['X-Instagram-AJAX'] = '1008288139';
+        if (b.api === 'app') {
+            authheader['User-Agent'] = 'Instagram 121.0.0.29.119 Android (26/8.0.0; 480dpi; 1080x2076; samsung; SM-A530F; jackpotlte; samsungexynos7885; en_US; 185203708)';
+            authheader['X-Instagram-AJAX'] = '1008288139';
+        }
         try {
             const ajax = await fetch('https://www.instagram.com/api/v1/web/accounts/login/ajax/', {'headers': authheader, 'timeout': 35000, 'body': `enc_password=#PWD_INSTAGRAM_BROWSER:0:${datenow()}:${b.password}&optIntoOneTap=false&queryParams={}&trustedDeviceRecords={}&username=${b.username}`, 'method': 'POST'}).then((e) => {return e}).catch((e) => {return false});
             await parseCookies('update', ajax);
@@ -411,4 +420,4 @@ const parseCookies = (a, b) => {
     }
 }
 
-module.exports = { createAccount, requestWeb, followtarget };
+module.exports = { createAccount, setbio, followtarget };
