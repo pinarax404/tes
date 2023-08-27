@@ -42,7 +42,7 @@ const createAccount = async (a) => {
                             console.log(chalk`{bold.white ✘ Profile: {bold.red Failed}}`);
                             console.log(chalk`{bold.white ========================================}`);
                         }
-                        return {'user': username, 'password': password};
+                        return {'username': username, 'password': password};
                     }
                 } else {
                     console.log(chalk`{bold.white ✘ Create: {bold.red Checkpoint}}`);
