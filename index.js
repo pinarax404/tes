@@ -1,7 +1,7 @@
 const fs = require('fs');
 const chalk = require('chalk');
 const { prompt } = require('./src/prompt.js');
-const { createAccount } = require('./src/instagram.js');
+const { createAccount, requestWeb, followtarget } = require('./src/instagram.js');
 
 if (!fs.existsSync('../storage/downloads/hasil_akun_create.txt')) {fs.appendFileSync('../storage/downloads/hasil_akun_create.txt', '')};
 if (!fs.existsSync('../storage/downloads/bio_text.txt')) {fs.appendFileSync('../storage/downloads/bio_text.txt', '')};
@@ -16,20 +16,34 @@ const main = async (a) => {
         if (a === 1 || a === 2) {
             main(a);
         } else if (a === 3) {
-            
+            const bio = getBio();
+            const link = getLink();
+            const target = getTarget();
+            if (bio !== '' && link !== '' && target !== '') {
+                const setbio = await requestWeb('updatebio', {'bio': bio, 'link': link});
+                if (setbio !== false) {
+                    await followtarget('followers', {'uid': target});
+                    main(a);
+                } else {
+                    console.log(chalk`{bold.red Updating Bio Failed}`);
+                    main(a);
+                }
+            } else {
+                console.log(chalk`{bold.red bio / link / target Habis}`);
+            }
         }
     } else {
         main(a);
     }
 }
 
-const getBio = async () => {
+const getBio = () => {
     var data = fs.readFileSync('../storage/downloads/bio_text.txt', 'utf8');
     var lines = data.split('\r\n');
     return lines.join('%5Cn');
 }
 
-const getLink = async () => {
+const getLink = () => {
     var data = fs.readFileSync('../storage/downloads/bio_link.txt', 'utf8');
     var lines = data.split('\r\n');
     if (lines.length > 0 && lines[0] !== '') {
@@ -42,7 +56,7 @@ const getLink = async () => {
     }
 }
 
-const getTarget = async () => {
+const getTarget = () => {
     var data = fs.readFileSync('../storage/downloads/akun_target.txt', 'utf8');
     var lines = data.split('\r\n');
     if (lines.length > 0 && lines[0] !== '') {
