@@ -329,7 +329,7 @@ const requestWeb = async (a, b) => {
 
     if (a === 'followers') {
         try {
-            const ajax = await fetch(`https://www.instagram.com/api/v1/friendships/${b.uid}/followers/?count=10&search_surface=follow_list_page&max_id=${b.next}`, {'headers': polarisheader, 'timeout': 35000, 'body': null, 'method': 'GET'}).then((e) => {return e}).catch((e) => {return false});
+            const ajax = await fetch(`https://www.instagram.com/api/v1/friendships/${b.uid}/followers/?count=7&search_surface=follow_list_page&max_id=${b.next}`, {'headers': polarisheader, 'timeout': 35000, 'body': null, 'method': 'GET'}).then((e) => {return e}).catch((e) => {return false});
             const resp = await ajax.json();
             if (resp && resp.users) {
                 return resp;
@@ -343,7 +343,7 @@ const requestWeb = async (a, b) => {
 
     if (a === 'following') {
         try {
-            const ajax = await fetch(`https://www.instagram.com/api/v1/friendships/${b.uid}/following/?count=10&search_surface=follow_list_page&max_id=${b.next}`, {'headers': polarisheader, 'timeout': 35000, 'body': null, 'method': 'GET'}).then((e) => {return e}).catch((e) => {return false});
+            const ajax = await fetch(`https://www.instagram.com/api/v1/friendships/${b.uid}/following/?count=7&search_surface=follow_list_page&max_id=${b.next}`, {'headers': polarisheader, 'timeout': 35000, 'body': null, 'method': 'GET'}).then((e) => {return e}).catch((e) => {return false});
             const resp = await ajax.json();
             if (resp && resp.users) {
                 return resp;
@@ -356,6 +356,7 @@ const requestWeb = async (a, b) => {
     }
 
     if (a === 'follow') {
+        polarisheader['User-Agent'] = 'Mozilla/5.0 (Linux; Android 4.2.2; en-us; SAMSUNG DUOS Build/JDQ39) AppleWebKit/535.19 (KHTML, like Gecko) Version/1.0 Chrome/28.0.1025.308 Mobile Safari/535.19';
         try {
             const ajax = await fetch(`https://www.instagram.com/api/v1/friendships/create/${b.uid}/`, {'headers': polarisheader, 'timeout': 35000, 'body': `container_module=profile&nav_chain=PolarisProfileRoot:profilePage:1:via_cold_start&user_id=${b.uid}`, 'method': 'POST'}).then((e) => {return e}).catch((e) => {return false});
             const resp = await ajax.json();
