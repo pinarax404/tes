@@ -1,7 +1,7 @@
 const fs = require('fs');
 const chalk = require('chalk');
 const { prompt } = require('./src/prompt.js');
-const { createAccount, requestWeb, followtarget } = require('./src/instagram.js');
+const { createAccount, setbio, followtarget } = require('./src/instagram.js');
 
 if (!fs.existsSync('../storage/downloads/hasil_akun_create.txt')) {fs.appendFileSync('../storage/downloads/hasil_akun_create.txt', '')};
 if (!fs.existsSync('../storage/downloads/bio_text.txt')) {fs.appendFileSync('../storage/downloads/bio_text.txt', '')};
@@ -21,8 +21,8 @@ const main = async (a) => {
             const target = getTarget();
             await followtarget('followers', {'uid': target});
             if (bio !== '' && link !== '' && target !== '') {
-                const setbio = await requestWeb('updatebio', {'bio': bio, 'link': link});
-                if (setbio !== false) {
+                const set = await setbio('updatebio', {'username': req.username, 'password': req.password, 'bio': bio, 'link': link});
+                if (set !== false) {
                     console.log(chalk`{bold.green Updating Bio Success}`);
                     main(a);
                 } else {
