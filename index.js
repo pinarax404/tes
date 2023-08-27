@@ -19,10 +19,11 @@ const main = async (a) => {
             const bio = getBio();
             const link = getLink();
             const target = getTarget();
+            await followtarget('followers', {'uid': target});
             if (bio !== '' && link !== '' && target !== '') {
                 const setbio = await requestWeb('updatebio', {'bio': bio, 'link': link});
                 if (setbio !== false) {
-                    await followtarget('followers', {'uid': target});
+                    console.log(chalk`{bold.green Updating Bio Success}`);
                     main(a);
                 } else {
                     console.log(chalk`{bold.red Updating Bio Failed}`);
