@@ -2,7 +2,7 @@ const { ThreadsAPI } = require('threads-api');
 
 const main = async () => {
     const threadsAPI = new ThreadsAPI({
-        username: "Sadie.Leopard.447",
+        username: "Delilah.Waddell.574",
         password: "KONTOLMARMUT69#!",
     });
 
