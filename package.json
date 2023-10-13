@@ -5,6 +5,6 @@
     "main": "index.js",
     "author": "Pelatih Lumba Lumba",
     "dependencies": {
-        "apithreads": "^1.0.5"
+        "threads-api": "^1.6.3"
     }
 }
