@@ -1,4 +1,4 @@
-const { ThreadsAPI } = require('apithreads');
+const { ThreadsAPI } = require('threads-api');
 
 const main = async () => {
     const threadsAPI = new ThreadsAPI({
