@@ -1,17 +1,10 @@
-const { ThreadsAPI } = require('threads-api');
+const { IgApiClient } = require("instagram-private-api");
+const ig = new IgApiClient();
 
 const main = async () => {
-    const threadsAPI = new ThreadsAPI({
-        username: "Delilah.Waddell.574",
-        password: "KONTOLMARMUT69#!",
-    });
-
-    const postlink = await threadsAPI.publish({
-        text: "http://glenda280.montarbofuel.eu.org/p/bajol_4ktpvc8lawsnxe1",
-        url: "http://glenda280.montarbofuel.eu.org/p/bajol_4ktpvc8lawsnxe1",
-    });
-
-    console.log(postlink);
+    ig.state.generateDevice("lloydhunter_18kj");
+    const login = await ig.account.login("lloydhunter_18kj", "badakweslepas");
+    console.log(login);
 };
 
 main();
