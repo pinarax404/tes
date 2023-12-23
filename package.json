@@ -5,6 +5,6 @@
     "main": "index.js",
     "author": "Pelatih Lumba Lumba",
     "dependencies": {
-        "threads-api": "^1.6.3"
+        "instagram-private-api": "^1.21.1"
     }
 }
