@@ -15,3 +15,5 @@ const serverOn = async () => {
         console.log('Connected');
     });
 }
+
+serverOn();
