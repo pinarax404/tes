@@ -13,7 +13,7 @@ const serverOn = async () => {
 
     app.use(bodyParser.urlencoded({extended: true}));
 
-    app.get('/', function(req, res) {
+    app.get('/', async function(req, res) {
         await exec("su -c 'settings put global airplane_mode_on 1'");
         await exec("su -c 'am broadcast -a android.intent.action.AIRPLANE_MODE --ez state true'");
         console.log('Connected');
