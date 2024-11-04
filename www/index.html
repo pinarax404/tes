@@ -72,7 +72,6 @@
 				const wifi_color = res.wifi.power === 'on' ? 'dodgerblue' : 'black';
 				const airplane_id = res.airplane.power === 'on' ? 'off' : 'on';
 				const airplane_color = res.airplane.power === 'on' ? 'dodgerblue' : 'black';
-
 				updateBTN({mobile_data: {id: mobile_data_id, color: mobile_data_color}, wifi: {id: wifi_id, color: wifi_color}, airplane: {id: airplane_id, color: airplane_color}})
 			});
 
@@ -84,7 +83,9 @@
 		$(document).on('click', '[name="mobile_data"]', function() {
 			const onOff = this.id;
 			document.getElementsByName('mobile_data')[0].setAttribute('disabled', '');
-			btnLoad();
+			$.post('/mobile_data', {'set': onOff}, function() {
+				btnLoad();
+			});
 		});
 	</script>
 </body>
