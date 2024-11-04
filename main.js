@@ -42,8 +42,8 @@ const serverOn = async () => {
         res.send(dump);
     });
 
-    app.get('/deviceInformation', async function(req, res) {
-        let dump = {battery: {value: null}, isp: {value: null}, apn: {value: null}};
+    app.get('/connection', async function(req, res) {
+        let dump = {battery: {value: null}, wifi: {value: null}};
 
         try {
             const a = await exec(`cat /sys/class/power_supply/battery/capacity`);
@@ -58,8 +58,7 @@ const serverOn = async () => {
 }
 
 ( async () => {
-    const a = await exec(`cat /data/data/com.android.providers.telephony/databases/telephony.db`);
+    const a = await exec(`su -c 'dumpsys telephony.registry'`);
     console.log(a);
 })();
-
 serverOn();
