@@ -18,9 +18,13 @@ const serverOn = async () => {
         res.sendFile(path.join(__dirname, './www', 'index.html'));
     });
 
-    app.get('/phone_network', async function(req, res) {
+    app.get('/phone_config', async function(req, res) {
         let dump = {mobile_data: '', wifi: '', airplane_mode: '', battery: ''};
 
+        const tes = await exec("getprop gsm.sim.operator.alpha");
+        console.log(tes);
+
+        
         const a = await exec("su -c 'settings get global mobile_data'");
         const mobile_data = a.stdout.split('\n');
         dump['mobile_data'] = mobile_data[0];
