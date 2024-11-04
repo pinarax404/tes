@@ -19,7 +19,8 @@ const serverOn = async () => {
     });
 
     app.get('/battery', async function(req, res) {
-        await exec("dumpsys battery | grep level | cut -d ':' -f2");
+        const req = await exec("dumpsys battery | grep level | cut -d ':' -f2");
+        console.log(req);
         res.send('battery');
     });
 }
