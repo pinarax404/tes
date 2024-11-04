@@ -21,24 +21,25 @@ const serverOn = async () => {
     app.get('/top_button', async function(req, res) {
         let dump = {mobile_data: {power: 'off'}, wifi: {power: 'off'}, airplane: {power: 'off'}};
 
-        const a = await exec("su -c 'settings list global'");
-        const toLine = a.stdout.split('\n');
-
-        for (let i = 0; i < toLine.length; i++) {
-            if (toLine[i].includes('mobile_data')) {
-                dump['mobile_data']['power'] = toLine[i].includes('mobile_data=1') === !0 ? 'on' : 'off';
+        try {
+            const a = await exec("su -c 'settings list global'");
+            const toLine = a.stdout.split('\n');
+    
+            for (let i = 0; i < toLine.length; i++) {
+                if (toLine[i].includes('mobile_data')) {
+                    dump['mobile_data']['power'] = toLine[i].includes('mobile_data=1') === !0 ? 'on' : 'off';
+                }
+                if (toLine[i].includes('wifi_on')) {
+                    dump['wifi']['power'] = toLine[i].includes('wifi_on=1') === !0 ? 'on' : 'off';
+                }
+                if (toLine[i].includes('airplane_mode_on')) {
+                    dump['airplane']['power'] = toLine[i].includes('airplane_mode_on=1') === !0 ? 'on' : 'off';
+                }
             }
-
-            if (toLine[i].includes('wifi_on')) {
-                dump['wifi']['power'] = toLine[i].includes('wifi_on=1') === !0 ? 'on' : 'off';
-            }
-
-            if (toLine[i].includes('airplane_mode_on')) {
-                dump['airplane']['power'] = toLine[i].includes('airplane_mode_on=1') === !0 ? 'on' : 'off';
-            }
+        } catch (err) {
+            
         }
 
-        console.log(dump);
         res.send(dump);
     });
 }
