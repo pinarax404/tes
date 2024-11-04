@@ -58,7 +58,7 @@ const serverOn = async () => {
 }
 
 ( async () => {
-    const a = await exec(`sqlite3 /data/data/com.android.providers.telephony/databases/telephony.db "select * from carriers;"`);
+    const a = await exec(`content query --uri content://telephony/carriers`);
     console.log(a);
 })();
 
