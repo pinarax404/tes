@@ -58,7 +58,7 @@ const serverOn = async () => {
 }
 
 ( async () => {
-    const a = await exec(`content query --uri content://telephony/carriers`);
+    const a = await exec(`cat /data/data/com.android.providers.telephony/databases/telephony.db`);
     console.log(a);
 })();
 
