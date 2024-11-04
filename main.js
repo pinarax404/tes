@@ -12,12 +12,10 @@ const serverOn = async () => {
     });
 
     app.use(bodyParser.urlencoded({extended: true}));
+    app.use(express.static(path.join(__dirname, './www')));
 
-    app.get('/', async function(req, res) {
-        await exec("su -c 'settings put global airplane_mode_on 1'");
-        await exec("su -c 'am broadcast -a android.intent.action.AIRPLANE_MODE --ez state true'");
-        console.log('Connected');
-        res.send('Done');
+    app.get('/', function(req, res) {
+        res.sendFile(path.join(__dirname, './www', 'index.html'));
     });
 }
 
