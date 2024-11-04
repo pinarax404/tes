@@ -25,9 +25,9 @@ const serverOn = async () => {
         const toLine = a.stdout.split('\n');
 
         for (let i = 0; i < toLine.length; i++) {
-            toLine[i].includes('mobile_data=1') === !0 ? dump['mobile_data']['power'] = 'on' :  dump['mobile_data']['power'] = 'off';
-            toLine[i].includes('wifi_on=1') === !0 ? dump['wifi']['power'] = 'on' :  dump['wifi']['power'] = 'off';
-            toLine[i].includes('airplane_mode_on=1') === !0 ? dump['airplane']['power'] = 'on' :  dump['airplane']['power'] = 'off';
+            dump['mobile_data']['power'] = toLine[i].includes('mobile_data=1') === !0 ? 'on' : 'off';
+            dump['wifi']['power'] = toLine[i].includes('wifi_on=1') === !0 ? 'on' : 'off';
+            dump['airplane']['power'] = toLine[i].includes('airplane_mode_on=1') === !0 ? 'on' : 'off';
         }
 
         console.log(dump);
