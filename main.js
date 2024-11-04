@@ -18,7 +18,7 @@ const serverOn = async () => {
         res.sendFile(path.join(__dirname, './www', 'index.html'));
     });
 
-    app.get('/mobile_data', async function(req, res) {
+    app.get('/phone_config', async function(req, res) {
         let dump = {mobile_data: '', wifi: '', airplane_mode: ''};
 
         const a = await exec("su -c 'settings get global mobile_data'");
@@ -33,7 +33,10 @@ const serverOn = async () => {
         const airplane_mode_on = c.stdout.split('\n');
         dump['airplane_mode'] = airplane_mode_on[0];
 
-        console.log(dump);
+        const d = await exec("cat /sys/class/power_supply/battery/capacity");
+
+        
+        console.log(d);
         res.send(dump);
     });
 }
