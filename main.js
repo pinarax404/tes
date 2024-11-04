@@ -65,6 +65,18 @@ const serverOn = async () => {
             res.send('');
         }
     });
+
+    app.post('/wifi', async function(req, res) {
+        if (req.body.set === 'on') {
+            await exec(`su -c 'svc wifi enable'`);
+            res.send('');
+        }
+
+        if (req.body.set === 'off') {
+            await exec(`su -c 'svc wifi disable'`);
+            res.send('');
+        }
+    });
 }
 
 serverOn();
