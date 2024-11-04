@@ -20,7 +20,7 @@ const serverOn = async () => {
 
     app.get('/phone_config', async function(req, res) {
 
-        const b = await exec("am start -n com.android.phone/com.android.phone.Settings");
+        const b = await exec("dumpsys wifi | grep -i ssid");
         console.log(b);
         res.send(b);
     });
