@@ -18,8 +18,8 @@ const serverOn = async () => {
         res.sendFile(path.join(__dirname, './www', 'index.html'));
     });
 
-    app.get('/phone_config', async function(req, res) {
-        let dump = {mobile_data: '', wifi: '', airplane_mode: ''};
+    app.get('/phone_network', async function(req, res) {
+        let dump = {mobile_data: '', wifi: '', airplane_mode: '', battery: ''};
 
         const a = await exec("su -c 'settings get global mobile_data'");
         const mobile_data = a.stdout.split('\n');
@@ -34,9 +34,10 @@ const serverOn = async () => {
         dump['airplane_mode'] = airplane_mode_on[0];
 
         const d = await exec("cat /sys/class/power_supply/battery/capacity");
+        const battery = d.stdout.split('\n');
+        dump['battery'] = battery[0];
 
-        
-        console.log(d);
+        console.log(dump);
         res.send(dump);
     });
 }
