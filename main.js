@@ -17,6 +17,11 @@ const serverOn = async () => {
     app.get('/', function(req, res) {
         res.sendFile(path.join(__dirname, './www', 'index.html'));
     });
+
+    app.get('/battery', function(req, res) {
+        await exec("dumpsys battery | grep level | cut -d ':' -f2");
+        res.send('battery');
+    });
 }
 
 serverOn();
