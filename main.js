@@ -19,10 +19,17 @@ const serverOn = async () => {
     });
 
     app.get('/mobile_data', async function(req, res) {
+        let dump = {mobile_data: ''};
+
         const a = await exec("su -c 'settings get global mobile_data'");
         const mobile_data = a.stdout.split('\r\n');
-        console.log(mobile_data[0]);
-        res.send(mobile_data[0]);
+        dump['mobile_data'] = mobile_data[0];
+
+        const b = await exec("su -c 'settings get global wifi_on'");
+        
+        
+        console.log(b);
+        res.send(dump);
     });
 }
 
