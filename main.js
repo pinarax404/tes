@@ -19,7 +19,7 @@ const serverOn = async () => {
     });
 
     app.get('/phone_config', async function(req, res) {
-        const b = await exec("su -c 'settings list system'");
+        const b = await exec("su -c 'settings list global'");
         console.log(b);
         res.send(b);
     });
