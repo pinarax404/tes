@@ -42,15 +42,6 @@ const serverOn = async () => {
         res.send(dump);
     });
 
-    app.get('/information', async function(req, res) {
-        let dump = {battery: {value: ''}, isp: {value: ''}, apn: {value: ''}};
-
-        try {
-            const a = await exec("cat /sys/class/power_supply/battery/capacity");
-            const battery = a.stdout.split('\n');
-            dump['battery'] = battery[0];
-        } catch (err)
-    });
 }
 
 serverOn();
