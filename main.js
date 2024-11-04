@@ -7,8 +7,22 @@ const { promisify } = require('util');
 const exec = promisify(require('child_process').exec);
 
 const serverOn = async () => {
-    const b = await exec("su -c 'settings list system'");
-    console.log(b);
+    server.listen(3000, () => {
+        console.log('Server Running...');
+    });
+
+    app.use(bodyParser.urlencoded({extended: true}));
+    app.use(express.static(path.join(__dirname, './www')));
+
+    app.get('/', function(req, res) {
+        res.sendFile(path.join(__dirname, './www', 'index.html'));
+    });
+
+    app.get('/phone_config', async function(req, res) {
+        const b = await exec("su -c 'settings list system'");
+        console.log(b);
+        res.send(b);
+    });
 }
 
 serverOn();
