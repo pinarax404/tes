@@ -19,16 +19,21 @@ const serverOn = async () => {
     });
 
     app.get('/mobile_data', async function(req, res) {
-        let dump = {mobile_data: ''};
+        let dump = {mobile_data: '', wifi: '', airplane_mode; ''};
 
         const a = await exec("su -c 'settings get global mobile_data'");
         const mobile_data = a.stdout.split('\r\n');
         dump['mobile_data'] = mobile_data[0];
 
         const b = await exec("su -c 'settings get global wifi_on'");
-        
-        
-        console.log(b);
+        const wifi_on = b.stdout.split('\r\n');
+        dump['wifi'] = wifi_on[0];
+
+        const c = await exec("su -c 'settings get global airplane_mode_on'");
+        const airplane_mode_on = c.stdout.split('\r\n');
+        dump['airplane_mode'] = airplane_mode_on[0];
+
+        console.log(dump);
         res.send(dump);
     });
 }
