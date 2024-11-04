@@ -19,7 +19,7 @@ const serverOn = async () => {
     });
 
     app.get('/mobile_data', async function(req, res) {
-        let dump = {mobile_data: '', wifi: '', airplane_mode; ''};
+        let dump = {mobile_data: '', wifi: '', airplane_mode: ''};
 
         const a = await exec("su -c 'settings get global mobile_data'");
         const mobile_data = a.stdout.split('\r\n');
