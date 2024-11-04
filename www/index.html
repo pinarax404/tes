@@ -95,6 +95,14 @@
 				btnLoad();
 			});
 		});
+
+		$(document).on('click', '[name="airplane"]', function() {
+			const onOff = this.id;
+			document.getElementsByName('airplane')[0].setAttribute('disabled', '');
+			$.post('/airplane', {'set': onOff}, function() {
+				btnLoad();
+			});
+		});
 	</script>
 </body>
 </html>
