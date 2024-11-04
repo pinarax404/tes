@@ -48,7 +48,7 @@ const serverOn = async () => {
         try {
             const a = await exec(`cat /sys/class/power_supply/battery/capacity`);
             const battery = a.stdout.split('\n');
-            dump['battery']['value'] = battery[0];
+            dump['battery']['value'] = battery[0] + '%';
         } catch (err) {}
 
         res.send(dump);
