@@ -18,7 +18,7 @@ const serverOn = async () => {
         res.sendFile(path.join(__dirname, './www', 'index.html'));
     });
 
-    app.get('/battery', function(req, res) {
+    app.get('/battery', async function(req, res) {
         await exec("dumpsys battery | grep level | cut -d ':' -f2");
         res.send('battery');
     });
