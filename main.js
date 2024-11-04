@@ -18,10 +18,11 @@ const serverOn = async () => {
         res.sendFile(path.join(__dirname, './www', 'index.html'));
     });
 
-    app.get('/battery', async function(req, res) {
-        const data = await exec("su -c 'settings get global mobile_data'");
-        console.log(data);
-        res.send('battery');
+    app.get('/mobile_data', async function(req, res) {
+        const a = await exec("su -c 'settings get global mobile_data'");
+        const mobile_data = a.stdout.split('\r\n');
+        console.log(mobile_data[0]);
+        res.send(mobile_data[0]);
     });
 }
 
