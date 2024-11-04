@@ -19,7 +19,7 @@ const serverOn = async () => {
         res.sendFile(path.join(__dirname, './www', 'index.html'));
     });
 
-    app.get('/top_button', async function(req, res) {
+    app.get('/buttonAttr', async function(req, res) {
         let dump = {mobile_data: {power: 'off'}, wifi: {power: 'off'}, airplane: {power: 'off'}};
 
         try {
@@ -42,6 +42,19 @@ const serverOn = async () => {
         res.send(dump);
     });
 
+    app.get('/deviceInformation', async function(req, res) {
+        let dump = {battery: {value: null}, isp: {value: null}, apn: {value: null}};
+
+        try {
+            const a = await exec(`cat /sys/class/power_supply/battery/capacity`);
+            const battery = a.stdout.split('\n');
+            dump['battery']['value'] = battery[0];
+
+            
+        } catch (err) {}
+
+        res.send(dump);
+    });
 }
 
 serverOn();
