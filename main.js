@@ -23,7 +23,7 @@ const serverOn = async () => {
         let dump = {mobile_data: {power: 'off'}, wifi: {power: 'off'}, airplane: {power: 'off'}};
 
         try {
-            const a = await exec('su -c \'settings list global\'');
+            const a = await exec(`su -c 'settings list global'`);
             const toLine = a.stdout.split('\n');
     
             for (let i = 0; i < toLine.length; i++) {
