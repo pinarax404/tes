@@ -54,7 +54,7 @@ const serverOn = async () => {
         res.send(dump);
     });
 
-    app.psot('/mobile_data', async function(req, res) {
+    app.post('/mobile_data', async function(req, res) {
         console.log(req.body.set);
         res.send('ok');
     });
