@@ -19,9 +19,15 @@ const serverOn = async () => {
     });
 
     app.get('/phone_config', async function(req, res) {
-        const b = await exec("su -c 'settings list global'");
-        console.log(b);
-        res.send(b);
+        let dump = [];
+        const a = await exec("su -c 'settings list global'");
+        const res = a.stdout.split('\n');
+        for (let i = 0; i < res.length; i++) {
+            dump.push(res[i]);
+        }
+        
+        console.log(dump);
+        res.send(dump);
     });
 }
 
