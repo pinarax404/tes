@@ -42,23 +42,17 @@ const serverOn = async () => {
         res.send(dump);
     });
 
-    app.get('/connection', async function(req, res) {
-        let dump = {battery: {value: null}, wifi: {value: null}};
+    app.get('/battery', async function(req, res) {
+        let dump = {battery: {value: null}};
 
         try {
             const a = await exec(`cat /sys/class/power_supply/battery/capacity`);
             const battery = a.stdout.split('\n');
             dump['battery']['value'] = battery[0];
-
-            
         } catch (err) {}
 
         res.send(dump);
     });
 }
 
-( async () => {
-    const a = await exec(`su -c 'dumpsys telephony.registry'`);
-    console.log(a);
-})();
 serverOn();
