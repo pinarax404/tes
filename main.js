@@ -55,8 +55,15 @@ const serverOn = async () => {
     });
 
     app.post('/mobile_data', async function(req, res) {
-        console.log(req.body.set);
-        res.send('ok');
+        if (req.body.set === 'on') {
+            await exec(`su -c 'svc data enable'`);
+            res.send('');
+        }
+
+        if (req.body.set === 'off') {
+            await exec(`su -c 'svc data disable'`);
+            res.send('');
+        }
     });
 }
 
