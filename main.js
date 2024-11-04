@@ -21,9 +21,9 @@ const serverOn = async () => {
     app.get('/phone_config', async function(req, res) {
         let dump = [];
         const a = await exec("su -c 'settings list global'");
-        const res = a.stdout.split('\n');
-        for (let i = 0; i < res.length; i++) {
-            dump.push(res[i]);
+        const toLine = a.stdout.split('\n');
+        for (let i = 0; i < toLine.length; i++) {
+            dump.push(toLine[i]);
         }
         
         console.log(dump);
