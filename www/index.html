@@ -80,6 +80,12 @@
 				document.getElementById('battery').innerHTML = res.battery.value;
 			});
 		}
+
+		$(document).on('click', '[name="mobile_data"]', function() {
+			const onOff = this.id;
+			document.getElementsByName('mobile_data').setAttribute('disabled', '');
+			btnLoad();
+		});
 	</script>
 </body>
 </html>
