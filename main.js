@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const { promisify } = require('util');
 const exec = promisify(require('child_process').exec);
+const fetch = require('node-fetch');
 
 const serverOn = async () => {
     server.listen(3000, () => {
@@ -22,7 +23,7 @@ const serverOn = async () => {
         let dump = {mobile_data: {power: 'off'}, wifi: {power: 'off'}, airplane: {power: 'off'}};
 
         try {
-            const a = await exec("su -c 'settings list global'");
+            const a = await exec('su -c \'settings list global\'');
             const toLine = a.stdout.split('\n');
     
             for (let i = 0; i < toLine.length; i++) {
@@ -36,11 +37,19 @@ const serverOn = async () => {
                     dump['airplane']['power'] = toLine[i].includes('airplane_mode_on=1') === !0 ? 'on' : 'off';
                 }
             }
-        } catch (err) {
-            
-        }
+        } catch (err) {}
 
         res.send(dump);
+    });
+
+    app.get('/information', async function(req, res) {
+        let dump = {battery: {value: ''}, isp: {value: ''}, apn: {value: ''}};
+
+        try {
+            const a = await exec("cat /sys/class/power_supply/battery/capacity");
+            const battery = a.stdout.split('\n');
+            dump['battery'] = battery[0];
+        } catch (err)
     });
 }
 
