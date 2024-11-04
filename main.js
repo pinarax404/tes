@@ -19,7 +19,7 @@ const serverOn = async () => {
     });
 
     app.get('/battery', async function(req, res) {
-        const data = await exec("su -c 'settings get global'");
+        const data = await exec("su -c 'settings get global mobile_data'");
         console.log(data);
         res.send('battery');
     });
