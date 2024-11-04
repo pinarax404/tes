@@ -87,7 +87,7 @@ const serverOn = async () => {
 
         if (req.body.set === 'off') {
             await exec(`su -c 'settings put global airplane_mode_on 0'`);
-            await exec(`su -c 'su -c 'am broadcast -a android.intent.action.AIRPLANE_MODE --ez state false'`);
+            await exec(`su -c 'am broadcast -a android.intent.action.AIRPLANE_MODE --ez state false'`);
             res.send('');
         }
     });
