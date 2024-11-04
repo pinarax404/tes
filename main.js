@@ -18,14 +18,18 @@ const serverOn = async () => {
         res.sendFile(path.join(__dirname, './www', 'index.html'));
     });
 
-    app.get('/phone_config', async function(req, res) {
-        let dump = [];
+    app.get('/top_button', async function(req, res) {
+        let dump = {mobile_data: {power: 'off'}, wifi: {power: 'off'}, airplane: {power: 'off'}};
+
         const a = await exec("su -c 'settings list global'");
         const toLine = a.stdout.split('\n');
+
         for (let i = 0; i < toLine.length; i++) {
-            dump.push(toLine[i]);
+            toLine[i].includes('mobile_data=1') === !0 ? dump['mobile_data']['power'] = 'on' :  dump['mobile_data']['power'] = 'off';
+            toLine[i].includes('wifi_on=1') === !0 ? dump['wifi']['power'] = 'on' :  dump['wifi']['power'] = 'off';
+            toLine[i].includes('airplane_mode_on=1') === !0 ? dump['airplane']['power'] = 'on' :  dump['airplane']['power'] = 'off';
         }
-        
+
         console.log(dump);
         res.send(dump);
     });
