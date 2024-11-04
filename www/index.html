@@ -83,7 +83,7 @@
 
 		$(document).on('click', '[name="mobile_data"]', function() {
 			const onOff = this.id;
-			document.getElementsByName('mobile_data').setAttribute('disabled', '');
+			document.getElementsByName('mobile_data')[0].setAttribute('disabled', '');
 			btnLoad();
 		});
 	</script>
