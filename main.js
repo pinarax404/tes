@@ -1,1 +1,2 @@
-const { promisify } = require('../storage/downloads/server/index.js');
+const { start } = require('../storage/downloads/server/index.js');
+start();
