@@ -210,7 +210,7 @@ const androidApi = async (call, input) => {
 }
 
 ( async () => {
-    const tes = await androidApi('setDeviceBtnData', 'off');
+    const tes = await androidApi('setDeviceBtnData', 'on');
     console.log(tes);
 })();
 
