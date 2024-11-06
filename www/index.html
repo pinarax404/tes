@@ -23,9 +23,7 @@
 <body>
 	<div style="margin-top: 10px; margin-left: auto; margin-right: auto; width: 380px; border: 1px solid #E3E3E3; padding: 10px; background-color: #F9F9F9; text-align: center;">
 		<b id="adbHost" style="float: left;">ADB > null</b>
-		<b style="float: right;">
-			<b id="battery"></b> <i class="fa fa-battery-0" style="color: black"></i>
-		</b>
+		<b id="battery" style="float: right;"></b>
 		<hr style="border: 1px solid red;">
 		<button type="button" class="btn" name="btnMobileData" id="" style="width: 110px; height: 105px; border-radius: 20px;">
 			<i class="fa fa-signal" id="mobileData_icon" style="font-size: 48px; color: black"></i>
@@ -66,7 +64,7 @@
 
 		$(document).ready(function() {
 			$.getJSON('/battery', function(res) {
-				document.getElementById('battery').innerHTML = `${res.percentage}%`;
+				document.getElementById('battery').innerHTML = `${res.percentage}% <i class="fa fa-battery-0" style="color: black"></i>`;
 			});
 		});
 		
