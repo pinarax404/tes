@@ -154,7 +154,20 @@ const serverOn = async () => {
 }
 
 const androidApi = async (call, input) => {
-    // Battery Status //
+    if (call === 'deviceBtn') {
+        try {
+            let [mobileData, wifi, airplane] = await Promise.all([exec("su -c 'settings get global mobile_data'"), exec("su -c 'settings get global wifi_on'"), exec("su -c 'settings get global airplane_mode_on'")]);
+
+            const btnData = JSON.parse(mobileData.stdout) === 0 ? 'off' : 'on';
+            const btnWifi = JSON.parse(wifi.stdout) === 0 ? 'off' : 'on';
+            const btnAirplane = JSON.parse(airplane.stdout) === 0 ? 'off' : 'on';
+
+            return {"status": "ok", "btnData": btnData, "btnWifi": btnWifi, "btnAirplane": btnAirplane};
+        } catch (err) {
+            return {"status": "fail", "btnData": "off", "btnWifi": "off", "btnAirplane": "off"};
+        }
+    }
+
     if (call === 'deviceBattery') {
         try {
             const request = await exec("termux-battery-status");
@@ -165,28 +178,13 @@ const androidApi = async (call, input) => {
         }
     }
 
-    if (call === 'deviceBtn') {
+    if (call === 'networkInfo') {
         try {
-            let [mobileData, wifi, airplane] = await Promise.all([exec("su -c 'settings get global mobile_data'"), exec("su -c 'settings get global wifi_on'"), exec("su -c 'settings get global airplane_mode_on'")]);
+            let [mobileData, wifi] = await Promise.all([exec("termux-telephony-deviceinfo"), exec("termux-wifi-connectioninfo")]);
 
-            const btnData = JSON.parse(mobileData.stdout) === 0 ? 'off' : 'on';
-            const btnWifi = JSON.parse(wifi.stdout) === 0 ? 'off' : 'on';
-            const btnAirplane = JSON.parse(airplane.stdout) === 0 ? 'off' : 'on';
-            return {"status": "ok", "btnData": btnData, "btnWifi": btnWifi, "btnAirplane": btnAirplane};
+            return {"status": "ok", "mobileData": JSON.parse(mobileData.stdout), "wifi": JSON.parse(wifi.stdout)};
         } catch (err) {
             return {"status": "fail"};
-        }
-    }
-
-    // Mobile Data //
-    if (call === 'deviceBtnData') {
-        try {
-            const request = await exec("su -c 'settings get global mobile_data'");
-            const res = JSON.parse(request.stdout);
-            const rp = res === 0 ? 'off' : 'on';
-            return {"status": "ok", "res": rp};
-        } catch (err) {
-            return {"status": "fail", "res": "off"};
         }
     }
 
@@ -200,40 +198,10 @@ const androidApi = async (call, input) => {
         }
     }
 
-    // Wifi //
-    if (call === 'deviceBtnWifi') {
-        try {
-            const request = await exec("su -c 'settings get global wifi_on'");
-            const res = JSON.parse(request.stdout);
-            return {"status": "ok", "res": res};
-        } catch (err) {
-            return {"status": "fail", "res": "0"};
-        }
-    }
-
-    if (call === 'setDeviceBtnWifi') {
-        try {
-            const command = input === 'on' ? "su -c 'svc data enable'" : "su -c 'svc data disable'";
-            await exec(command);
-            return {"status": "ok"};
-        } catch (err) {
-            return {"status": "fail"};
-        }
-    }
-
-    if (call === 'deviceBtnAirplane') {
-        try {
-            const request = await exec("su -c 'settings get global airplane_mode_on'");
-            const res = JSON.parse(request.stdout);
-            return {"status": "ok", "res": res};
-        } catch (err) {
-            return {"status": "fail", "res": "0"};
-        }
-    }
 }
 
 ( async () => {
-    const tes = await androidApi('deviceBtn');
+    const tes = await androidApi('networkInfo');
     console.log(tes);
 })();
 
