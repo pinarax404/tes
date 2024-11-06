@@ -102,7 +102,7 @@ const androidApi = async (call, moreCall, input) => {
     }
 
     if (call === 'scanWifi2') {
-        const request = await exec("su 0 service call wifi 11");
+        const request = await exec("su -c 'service call wifi 11'");
         return request;
     }
 }
