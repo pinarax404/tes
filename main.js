@@ -29,13 +29,13 @@ const serverOn = async () => {
                 dump['battery'] = reqBattery;
 
                 const reqMobile_data = await exec("su -c 'settings get global mobile_data'");
-                dump['mobile_data'] = reqMobile_data;
+                dump['mobile_data'] = reqMobile_data.stdout.trim();
 
                 const reqWifi_on = await exec("su -c 'settings get global wifi_on'");
-                dump['wifi'] = reqWifi_on;
+                dump['wifi'] = reqWifi_on.stdout.trim();
 
                 const reqAirplane = await exec("su -c 'settings get global airplane_mode_on'");
-                dump['airplane'] = reqAirplane;
+                dump['airplane'] = reqAirplane.stdout.trim();
 
                 res.send(dump);
             });
