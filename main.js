@@ -181,7 +181,7 @@ const androidApi = async (call, input) => {
     if (call === 'networkInfo') {
         try {
             const mobileData = await exec("termux-telephony-deviceinfo");
-            const cellSignal = await exec("termux-telephony-signalstrength");
+            const cellSignal = await exec("termux-info");
             const wifi = await exec("termux-wifi-connectioninfo");
 
             return {"status": "ok", "mobileData": JSON.parse(mobileData.stdout), "cellSignal": JSON.parse(cellSignal.stdout), "wifi": JSON.parse(wifi.stdout)};
