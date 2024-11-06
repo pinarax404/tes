@@ -69,6 +69,15 @@ const serverOn = async () => {
             res.send({"status": "fail"});
         }
     });
+
+    app.get('/tes', function(req, res) {
+        try {
+            const reqq = exec("su -c 'svc wifi status'");
+            res.send(reqq);
+        } catch (err) {
+            res.send({"status": "fail"});
+        }
+    });
 }
 
 serverOn();
