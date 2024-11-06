@@ -50,7 +50,7 @@ const serverOn = async () => {
         }
     });
 
-    app.get('/deviceinfo', function(req, res) {
+    app.get('/deviceinfo', async function(req, res) {
         try {
             const termux_telephony_deviceinfo = await androapi.termux_telephony_deviceinfo((response) => {return response});
             res.send(termux_telephony_deviceinfo);
