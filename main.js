@@ -20,9 +20,9 @@ const serverOn = async () => {
         res.sendFile(path.join(__dirname, './www', 'index.html'));
     });
 
-    app.get('/sms_list', function(req, res) {
+    app.get('/batteryInfo', function(req, res) {
         try {
-            androapi.termux_sms_list('all', 50, 'all', (response) => {
+            androapi.termux_battery_status((response) => {
                 res.send(response);
             });
         } catch (err) {
@@ -30,13 +30,31 @@ const serverOn = async () => {
         }
     });
 
-    app.get('/deviceinfo', async function(req, res) {
+    app.get('/cellInfo', function(req, res) {
         try {
-            const mobile_data = await androapi.termux_telephony_deviceinfo((response) => {return response});
-            const cell_info = await androapi.termux_telephony_cellinfo((response) => {return response});
-            const wifi_info = await androapi.termux_wifi_connectioninfo((response) => {return response});
-            //const battery_info = await androapi.termux_battery_status((response) => {return response});
-            res.send({"mobile_data": mobile_data, "cell_info": cell_info, "wifi_info": wifi_info});
+            androapi.termux_telephony_cellinfo((response) => {
+                res.send(response);
+            });
+        } catch (err) {
+            res.send({"status": "fail"});
+        }
+    });
+
+    app.get('/mobileDataInfo', function(req, res) {
+        try {
+            androapi.termux_telephony_deviceinfo((response) => {
+                res.send(response);
+            });
+        } catch (err) {
+            res.send({"status": "fail"});
+        }
+    });
+
+    app.get('/wifiInfo', function(req, res) {
+        try {
+            androapi.termux_wifi_connectioninfo((response) => {
+                res.send(response);
+            });
         } catch (err) {
             res.send({"status": "fail"});
         }
