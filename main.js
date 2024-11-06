@@ -156,7 +156,7 @@ const serverOn = async () => {
 const androidApi = async (call) => {
     if (call === 'deviceBattery') {
         const request = await exec("termux-battery-status");
-        return JSON.parse(request);
+        return JSON.parse(request.stdout);
     }
 }
 
