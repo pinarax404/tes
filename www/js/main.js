@@ -7,13 +7,13 @@ $(document).ready(function() {
 
 $(document).on('click', '[id="btnMobileData"]', function() {
     const onOff = this.name;
-    document.getElementsByName('btnMobileData')[0].setAttribute('disabled', '');
+    document.getElementById('btnMobileData').setAttribute('disabled', '');
     $.post('/switchButton', {'name': 'mobileData', 'state': onOff});
 });
 
 $(document).on('click', '[id="btnAirplaneMode"]', function() {
     const onOff = this.name;
-    document.getElementsByName('btnAirplaneMode')[0].setAttribute('disabled', '');
+    document.getElementById('btnAirplaneMode').setAttribute('disabled', '');
     $.post('/switchButton', {'name': 'airplane', 'state': onOff});
 });
 
