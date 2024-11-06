@@ -70,10 +70,10 @@ const serverOn = async () => {
         }
     });
 
-    app.get('/tes', function(req, res) {
+    app.post('/buttonWifi', function(req, res) {
         try {
-            const res = exec("su -c 'svc wifi status'");
-            res.send({res});
+            await androapi.termux_wifi_enable(req.body.attr);
+            res.send({"status": "success"});
         } catch (err) {
             res.send({"status": "fail"});
         }
