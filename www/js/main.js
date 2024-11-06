@@ -13,17 +13,21 @@ $(document).on('click', '[id="btnMobileData"]', function() {
 
 let shortPress = true;
 let timer;
+
 $('#btnWifi').on('mousedown', function() {
     shortPress = true;
     timer = setTimeout(function() {
         shortPress = false;
-        alert('Long Press');
-    }, 1000);
+        $.post('/switchButton', {'name': 'wifi', 'state': onOff}, function() {
+            $.getJSON('/scanWifi', function(res) {updateWifiList(res)});
+        });
+    }, 500);
 });
 
 $('#btnWifi').on('mouseup', function() {
     clearTimeout(timer);
     if (shortPress == true) {
+        document.getElementById('btnWifi').setAttribute('disabled', '');
         const onOff = document.getElementById('btnWifi').getAttribute('name');
         $.post('/switchButton', {'name': 'wifi', 'state': onOff});
     }
@@ -67,5 +71,18 @@ function updateNetwork(res) {
             document.getElementById('networkInfo').innerHTML += `<span type="button" class="btn btn-white w-100 align-items-stretch d-flex" style="width: 358px; background-color: #EBEBEB;"><b style="float: left;">Status</b><b style="float: right;">${res.wifiState}</b></span>`;
             document.getElementById('networkInfo').innerHTML += `<span type="button" class="btn btn-white w-100 align-items-stretch d-flex" style="width: 358px; background-color: #EBEBEB;"><b style="float: left;">SSID</b><b style="float: right;">${res.wifiSsid}</b></span>`;
         }
+    }
+}
+
+function updateWifiList(res) {
+    $('#mainModal').modal('show');
+
+    if (res.status === 'ok') {
+        document.getElementById('modalResult').innerHTML = '';
+        for (let i = 0; i < res.wifi.length; i++) {
+            
+        }
+    } else {
+        document.getElementById('modalResult').innerHTML = `<span type="button" class="btn btn-white w-100 align-items-stretch d-flex" style="width: 358px; background-color: #EBEBEB;"><center><b style="color: red;">Network Priority</b></center></span>`;
     }
 }
