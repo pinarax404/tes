@@ -29,4 +29,8 @@ async function execut(command_line, callback) {
     });
 }
 
-deviceBattery();
+(async () => {
+    const tes = await deviceBattery();
+    console.log(tes);
+}
+
