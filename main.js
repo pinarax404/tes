@@ -20,78 +20,9 @@ const serverOn = async () => {
         res.sendFile(path.join(__dirname, './www', 'index.html'));
     });
 
-    app.get('/buttonAttr', async function(req, res) {
-        let dump = {mobile_data: {power: 'off'}, wifi: {power: 'off'}, airplane: {power: 'off'}};
+    const tes = await api.termux_battery_status();
 
-        try {
-            const a = await exec(`su -c 'settings list global'`);
-            const toLine = a.stdout.split('\n');
-    
-            for (let i = 0; i < toLine.length; i++) {
-                if (toLine[i].includes('mobile_data')) {
-                    dump['mobile_data']['power'] = toLine[i].includes('mobile_data=1') === !0 ? 'on' : 'off';
-                }
-                if (toLine[i].includes('wifi_on')) {
-                    dump['wifi']['power'] = toLine[i].includes('wifi_on=1') === !0 ? 'on' : 'off';
-                }
-                if (toLine[i].includes('airplane_mode_on')) {
-                    dump['airplane']['power'] = toLine[i].includes('airplane_mode_on=1') === !0 ? 'on' : 'off';
-                }
-            }
-        } catch (err) {}
-
-        res.send(dump);
-    });
-
-    app.get('/battery', async function(req, res) {
-        let dump = {battery: {value: null}};
-
-        try {
-            const a = await exec(`cat /sys/class/power_supply/battery/capacity`);
-            const battery = a.stdout.split('\n');
-            dump['battery']['value'] = battery[0] + '%';
-        } catch (err) {}
-
-        res.send(dump);
-    });
-
-    app.post('/mobile_data', async function(req, res) {
-        if (req.body.set === 'on') {
-            await exec(`su -c 'svc data enable'`);
-            res.send('');
-        }
-
-        if (req.body.set === 'off') {
-            await exec(`su -c 'svc data disable'`);
-            res.send('');
-        }
-    });
-
-    app.post('/wifi', async function(req, res) {
-        if (req.body.set === 'on') {
-            await exec(`su -c 'svc wifi enable'`);
-            res.send('');
-        }
-
-        if (req.body.set === 'off') {
-            await exec(`su -c 'svc wifi disable'`);
-            res.send('');
-        }
-    });
-
-    app.post('/airplane', async function(req, res) {
-        if (req.body.set === 'on') {
-            await exec(`su -c 'settings put global airplane_mode_on 1'`);
-            await exec(`su -c 'am broadcast -a android.intent.action.AIRPLANE_MODE --ez state true'`);
-            res.send('');
-        }
-
-        if (req.body.set === 'off') {
-            await exec(`su -c 'settings put global airplane_mode_on 0'`);
-            await exec(`su -c 'am broadcast -a android.intent.action.AIRPLANE_MODE --ez state false'`);
-            res.send('');
-        }
-    });
+    console.log(tes);
 }
 
 serverOn();
