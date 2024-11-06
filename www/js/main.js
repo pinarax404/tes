@@ -98,7 +98,7 @@ function updateNetwork(res) {
     }
 
     setTimeout(function() {
-        $.getJSON('/network', function(resNext) {updateNetwork(resNext)});
+        //$.getJSON('/network', function(resNext) {updateNetwork(resNext)});
     }, 5000);
 }
 
