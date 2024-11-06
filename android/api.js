@@ -27,10 +27,10 @@ const androidApi = async (call, moreCall, input) => {
             const resWifi = JSON.parse(wifi.stdout);
 
             const priority = resWifi.ssid === '<unknown ssid>' ? "mobile_data" : "Wifi";
-            const dataState = resMobileData.data_state;
+            const dataState = resMobileData.data_state === 'disconnected' ? "Disconnected" : "Connected";
             const dataType = resMobileData.network_type;
             const dataOperator = resMobileData.sim_operator_name;
-            const wifiState = resWifi.ssid === '<unknown ssid>' ? "disconnected" : "connected";
+            const wifiState = resWifi.ssid === '<unknown ssid>' ? "Disconnected" : "Connected";
             const wifiSsid = resWifi.ssid;
 
             return {"status": "ok", "priority": priority, "dataState": dataState, "dataType": dataType, "dataOperator": dataOperator, "wifiState": wifiState, "wifiSsid": wifiSsid};
