@@ -59,6 +59,16 @@ const serverOn = async () => {
             res.send({"status": "fail"});
         }
     });
+
+    app.get('/wifiinfo', function(req, res) {
+        try {
+            androapi.termux_wifi_connectioninfo((response) => {
+                res.send(response);
+            });
+        } catch (err) {
+            res.send({"status": "fail"});
+        }
+    });
 }
 
 serverOn();
