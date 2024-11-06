@@ -169,13 +169,9 @@ const androidApi = async (call, input) => {
         try {
             let [mobileData, wifi, airplane] = await Promise.all([exec("su -c 'settings get global mobile_data'"), exec("su -c 'settings get global wifi_on'"), exec("su -c 'settings get global airplane_mode_on'")]);
 
-            const resMobileData = JSON.parse(mobileData.stdout);
-            const resWifi = JSON.parse(wifi.stdout);
-            const resAirplane = JSON.parse(airplane.stdout);
-
-            const btnData = resMobileData === 0 ? 'off' : 'on';
-            const btnWifi = resWifi === 0 ? 'off' : 'on';
-            const btnAirplane = resAirplane === 0 ? 'off' : 'on';
+            const btnData = JSON.parse(mobileData.stdout) === 0 ? 'off' : 'on';
+            const btnWifi = JSON.parse(wifi.stdout) === 0 ? 'off' : 'on';
+            const btnAirplane = JSON.parse(airplane.stdout) === 0 ? 'off' : 'on';
             return {"status": "ok", "btnData": btnData, "btnWifi": btnWifi, "btnAirplane": btnAirplane};
         } catch (err) {
             return {"status": "fail"};
