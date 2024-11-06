@@ -33,10 +33,10 @@ const serverOn = async () => {
     app.get('/deviceinfo', async function(req, res) {
         try {
             const mobile_data = await androapi.termux_telephony_deviceinfo((response) => {return response});
-            const cell_info = await androapi.termux_telephony_cellinfo((response) => {return response});
-            const wifi_info = await androapi.termux_wifi_connectioninfo((response) => {return response});
-            const battery_info = await androapi.termux_battery_status((response) => {return response});
-            res.send({"mobile_data": mobile_data, "cell_info": cell_info, "wifi_info": wifi_info, "battery_info": battery_info});
+            //const cell_info = await androapi.termux_telephony_cellinfo((response) => {return response});
+            //const wifi_info = await androapi.termux_wifi_connectioninfo((response) => {return response});
+            //const battery_info = await androapi.termux_battery_status((response) => {return response});
+            res.send({"mobile_data": mobile_data});
         } catch (err) {
             res.send({"status": "fail"});
         }
