@@ -156,9 +156,8 @@ const serverOn = async () => {
 const androidApi = async (call) => {
     if (call === 'deviceBattery') {
         try {
-            await androapi.termux_battery_status((response) => {
-                return {"status": "ok", "data": response};
-            });
+            const req = await exec('termux-battery-status');
+            return {"status": "ok", "data": req};
         } catch (err) {
             return {"status": "fail"};
         }
@@ -167,7 +166,7 @@ const androidApi = async (call) => {
 
 ( async () => {
     const tes = await androidApi('deviceBattery');
-        console.log(tes);
+    console.log(tes);
 })();
 
 serverOn();
