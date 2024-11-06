@@ -22,11 +22,6 @@ const serverOn = async () => {
         res.send(request);
     });
 
-    app.get('/battery', async function(req, res) {
-        const request = await androidApi('deviceBattery', '', '');
-        res.send(request);
-    });
-
     app.get('/network', async function(req, res) {
         const request = await androidApi('networkInfo', '', '');
         res.send(request);
