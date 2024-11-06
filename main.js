@@ -20,9 +20,9 @@ const serverOn = async () => {
         res.sendFile(path.join(__dirname, './www', 'index.html'));
     });
 
-    app.post('/callbackDevice', function(req, res) {
+    app.get('/callbackDevice', function(req, res) {
         try {
-            androapi[req.body.api]((response) => {
+            androapi[req.query.api]((response) => {
                 res.send(response);
             });
         } catch (err) {
