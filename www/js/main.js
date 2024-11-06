@@ -54,6 +54,14 @@ $(document).on('click', '[id="btnAirplaneMode"]', function() {
     });
 });
 
+$(document).on('click', '[id="btnChangeIp"]', function() {
+    const onOff = document.getElementById('btnChangeIp').getAttribute('name');
+    document.getElementById('btnChangeIp').setAttribute('disabled', '');
+    $.post('/switchButton', {'name': 'changeIP'}, function() {
+        document.getElementById('btnChangeIp').removeAttribute('disabled');
+    });
+});
+
 function updateBtn(res) {
     if (res.status === 'ok') {
         const mobileDataId = res.btnData === 'on' ? 'off' : 'on';
