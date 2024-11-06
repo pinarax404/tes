@@ -14,16 +14,16 @@ $(document).on('click', '[name="btnMobileData"]', function() {
     $.post('/switchButton', {'name': 'mobileData', 'state': onOff});
 });
 
-$('[name="btnWifi"]').on('click', function() {
+$(document).on('click', '[name="btnWifi"]', function() {
     const onOff = this.id;
-    (longpress) ? $.post('/switchButton', {'name': 'wifi', 'state': onOff}) : $.get('/scanWifi', {});
-});
-$('[name="btnWifi"]').on('mousedown', function() {
-    startTime = new Date().getTime();
-});
-$('[name="btnWifi"]').on('mouseup', function() {
-    endTime = new Date().getTime();
-    longpress = (endTime - startTime < 500) ? false : true;
+    var timeout = window.setTimeout(function() {
+        alert('long Press');
+    }, 1000);
+
+    $(document).on('mouseup', '[name="btnWifi"]', function() {
+        window.clearTimeout(timeout);
+        alert('short Press');
+    });
 });
 
 $(document).on('click', '[name="btnAirplaneMode"]', function() {
