@@ -20,11 +20,11 @@ const serverOn = async () => {
         res.sendFile(path.join(__dirname, './www', 'index.html'));
     });
 
-    // =========== btn action
+    // =========== get btn action ===========
     app.get('/getBatteryInfo', function(req, res) {
         try {
             androapi.termux_battery_status((response) => {
-                res.send(response);
+                res.send({"status": "success", "value": response});
             });
         } catch (err) {
             res.send({"status": "fail"});
@@ -34,7 +34,7 @@ const serverOn = async () => {
     app.get('/getMobileDataBtn', async function(req, res) {
         try {
             const request = await exec("su -c 'settings get global mobile_data'");
-            res.send(request.stdout.trim());
+            res.send({"status": "success", "value": request.stdout.trim()});
         } catch (err) {
             res.send({"status": "fail"});
         }
@@ -43,7 +43,7 @@ const serverOn = async () => {
     app.get('/getWifiBtn', async function(req, res) {
         try {
             const request = await exec("su -c 'settings get global wifi_on'");
-            res.send(request.stdout.trim());
+            res.send({"status": "success", "value": request.stdout.trim()});
         } catch (err) {
             res.send({"status": "fail"});
         }
@@ -52,14 +52,35 @@ const serverOn = async () => {
     app.get('/getAirplaneBtn', async function(req, res) {
         try {
             const request = await exec("su -c 'settings get global airplane_mode_on'");
-            res.send(request.stdout.trim());
+            res.send({"status": "success", "value": request.stdout.trim()});
         } catch (err) {
             res.send({"status": "fail"});
         }
     });
 
-    // =========== btn action
+    // =========== get btn action ===========
 
+    // =========== set btn action ===========
+
+    app.post('/setMobileDataBtn', async function(req, res) {
+        try {
+            await exec("su -c 'settings put global mobile_data 1'");
+            res.send({"status": "success"});
+        } catch (err) {
+            res.send({"status": "fail"});
+        }
+    });
+    
+    app.post('/setWifiBtn', async function(req, res) {
+        try {
+            await androapi.termux_wifi_enable(req.body.attr);
+            res.send({"status": "success"});
+        } catch (err) {
+            res.send({"status": "fail"});
+        }
+    });
+
+    // =========== set btn action ===========
 
     app.get('/cellInfo', function(req, res) {
         try {
@@ -96,15 +117,6 @@ const serverOn = async () => {
             androapi.termux_wifi_scaninfo((response) => {
                 res.send(response);
             });
-        } catch (err) {
-            res.send({"status": "fail"});
-        }
-    });
-
-    app.post('/buttonWifi', async function(req, res) {
-        try {
-            await androapi.termux_wifi_enable(req.body.attr);
-            res.send({"status": "success"});
         } catch (err) {
             res.send({"status": "fail"});
         }
