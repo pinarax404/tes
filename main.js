@@ -153,7 +153,7 @@ const serverOn = async () => {
     });
 }
 
-const androidApi = async (call) => {
+const androidApi = async (call, input) => {
     // Battery Status //
     if (call === 'deviceBattery') {
         try {
@@ -164,7 +164,6 @@ const androidApi = async (call) => {
             return {"status": "fail", "percentage": "0", "temperature": "0"};
         }
     }
-    // Battery Status //
 
     // mobile_data //
     if (call === 'deviceBtnData') {
@@ -178,7 +177,16 @@ const androidApi = async (call) => {
         }
     }
 
-    // mobile_data //
+    if (call === 'setDeviceBtnData') {
+        try {
+            const command = input === 'on' ? 'su -c 'svc data enable'' : 'su -c 'svc data disable'';
+            await exec(command);
+            return {"status": "ok"};
+        } catch (err) {
+            return {"status": "fail"};
+        }
+    }
+
 
     if (call === 'deviceBtnWifi') {
         try {
@@ -202,7 +210,7 @@ const androidApi = async (call) => {
 }
 
 ( async () => {
-    const tes = await androidApi('deviceBtnData');
+    const tes = await androidApi('setDeviceBtnData', 'off');
     console.log(tes);
 })();
 
