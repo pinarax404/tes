@@ -33,7 +33,7 @@ const serverOn = async () => {
     app.get('/mobileDataBtn', async function(req, res) {
         try {
             const request = await exec("su -c 'settings get global mobile_data'");
-            res.send(request);
+            res.send(request.stdout.trim());
         } catch (err) {
             res.send({"status": "fail"});
         }
