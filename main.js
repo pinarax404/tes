@@ -20,6 +20,7 @@ const serverOn = async () => {
         res.sendFile(path.join(__dirname, './www', 'index.html'));
     });
 
+    // =========== btn action
     app.get('/batteryInfo', function(req, res) {
         try {
             androapi.termux_battery_status((response) => {
@@ -38,7 +39,20 @@ const serverOn = async () => {
             res.send({"status": "fail"});
         }
     });
-    
+
+    app.get('/wifiBtn', async function(req, res) {
+        try {
+            const request = await exec("su -c 'settings get global wifi_on'");
+            res.send(request.stdout.trim());
+        } catch (err) {
+            res.send({"status": "fail"});
+        }
+    });
+
+
+    // =========== btn action
+
+
     app.get('/cellInfo', function(req, res) {
         try {
             androapi.termux_telephony_cellinfo((response) => {
