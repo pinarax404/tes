@@ -1,6 +1,3 @@
-var longpress = false;
-var startTime, endTime;
-
 document.getElementById('adbHost').innerHTML = `ADB > ${window.location.host}`;
 
 $(document).ready(function() {
@@ -13,8 +10,6 @@ $(document).on('click', '[name="btnMobileData"]', function() {
     document.getElementsByName('btnMobileData')[0].setAttribute('disabled', '');
     $.post('/switchButton', {'name': 'mobileData', 'state': onOff});
 });
-
-
 
 $(document).on('click', '[name="btnAirplaneMode"]', function() {
     const onOff = this.id;
