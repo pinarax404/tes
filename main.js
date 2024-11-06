@@ -49,6 +49,14 @@ const serverOn = async () => {
         }
     });
 
+    app.get('/getAirplaneBtn', async function(req, res) {
+        try {
+            const request = await exec("su -c 'settings get global airplane_mode_on'");
+            res.send(request.stdout.trim());
+        } catch (err) {
+            res.send({"status": "fail"});
+        }
+    });
 
     // =========== btn action
 
