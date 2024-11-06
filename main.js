@@ -39,6 +39,16 @@ const serverOn = async () => {
             res.send({"status": "fail"});
         }
     });
+
+    app.get('/cellinfo', function(req, res) {
+        try {
+            androapi.termux_telephony_cellinfo((response) => {
+                res.send(response);
+            });
+        } catch (err) {
+            res.send({"status": "fail"});
+        }
+    });
 }
 
 serverOn();
