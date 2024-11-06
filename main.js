@@ -32,6 +32,11 @@ const serverOn = async () => {
         res.send(request);
     });
 
+    app.get('/scanWifi2', async function(req, res) {
+        const request = await androidApi('scanWifi2', '', '');
+        res.send(request);
+    });
+
     app.post('/switchButton', async function(req, res) {
         const request = await androidApi('setDeviceBtn', req.body.name, req.body.state);
         res.send(request);
