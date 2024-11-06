@@ -165,7 +165,24 @@ const androidApi = async (call, input) => {
         }
     }
 
-    // mobile_data //
+    if (call === 'deviceBtn') {
+        try {
+            let [mobileData, wifi, airplane] = await Promise.all([exec("su -c 'settings get global mobile_data'"), exec("su -c 'settings get global wifi_on'"), exec("su -c 'settings get global airplane_mode_on'")]);
+
+            const resMobileData = JSON.parse(mobileData.stdout);
+            const resWifi = JSON.parse(wifi.stdout);
+            const resAirplane = JSON.parse(airplane.stdout);
+
+            const btnData = resMobileData === 0 ? 'off' : 'on';
+            const btnWifi = resWifi === 0 ? 'off' : 'on';
+            const btnAirplane = resAirplane === 0 ? 'off' : 'on';
+            return {"status": "ok", "btnData": btnData, "btnWifi": btnWifi, "btnAirplane": btnAirplane};
+        } catch (err) {
+            return {"status": "fail"};
+        }
+    }
+
+    // Mobile Data //
     if (call === 'deviceBtnData') {
         try {
             const request = await exec("su -c 'settings get global mobile_data'");
@@ -187,7 +204,7 @@ const androidApi = async (call, input) => {
         }
     }
 
-
+    // Wifi //
     if (call === 'deviceBtnWifi') {
         try {
             const request = await exec("su -c 'settings get global wifi_on'");
@@ -195,6 +212,16 @@ const androidApi = async (call, input) => {
             return {"status": "ok", "res": res};
         } catch (err) {
             return {"status": "fail", "res": "0"};
+        }
+    }
+
+    if (call === 'setDeviceBtnWifi') {
+        try {
+            const command = input === 'on' ? "su -c 'svc data enable'" : "su -c 'svc data disable'";
+            await exec(command);
+            return {"status": "ok"};
+        } catch (err) {
+            return {"status": "fail"};
         }
     }
 
@@ -210,7 +237,7 @@ const androidApi = async (call, input) => {
 }
 
 ( async () => {
-    const tes = await androidApi('setDeviceBtnData', 'on');
+    const tes = await androidApi('deviceBtn');
     console.log(tes);
 })();
 
