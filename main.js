@@ -32,11 +32,6 @@ const serverOn = async () => {
         res.send(request);
     });
 
-    app.post('/shell', async function(req, res) {
-        const request = await androidApi('shell', '', req.body.input);
-        res.send(request);
-    });
-
     app.post('/switchButton', async function(req, res) {
         const request = await androidApi('setDeviceBtn', req.body.name, req.body.state);
         res.send(request);
