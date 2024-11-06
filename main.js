@@ -157,7 +157,7 @@ const androidApi = async (call) => {
     if (call === 'deviceBattery') {
         return new Promise((resolve, reject) => {
             androapi.termux_battery_status((response) => {
-                resolve(resolve);
+                resolve(response);
             });
         });
     }
