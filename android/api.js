@@ -33,7 +33,7 @@ const androidApi = async (call, moreCall, input) => {
             const mobileData = await exec("termux-telephony-deviceinfo");
             const wifi = await exec("termux-wifi-connectioninfo");
 
-            return {"status": "ok", "mobileData": JSON.parse(mobileData.stdout), "wifi": JSON.parse(wifi.stdout)};
+            return {"status": "ok", "dataState": JSON.parse(mobileData.stdout), "wifi": JSON.parse(wifi.stdout)};
         } catch (err) {
             return {"status": "fail", "mobileData": {}, "wifi": {}};
         }
