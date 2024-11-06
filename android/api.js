@@ -10,8 +10,9 @@ const androidApi = async (call, moreCall, input) => {
             const btnData = JSON.parse(mobileData.stdout) === 0 ? 'off' : 'on';
             const btnWifi = JSON.parse(wifi.stdout) === 0 ? 'off' : 'on';
             const btnAirplane = JSON.parse(airplane.stdout) === 0 ? 'off' : 'on';
+            const batt = JSON.parse(battery.stdout);
 
-            return {"status": "ok", "btnData": btnData, "btnWifi": btnWifi, "btnAirplane": btnAirplane, "battery": battery.percentage + "%"};
+            return {"status": "ok", "btnData": btnData, "btnWifi": btnWifi, "btnAirplane": btnAirplane, "battery": batt.percentage + "%"};
         } catch (err) {
             return {"status": "fail", "btnData": "off", "btnWifi": "off", "btnAirplane": "off", "battery": "null"};
         }
