@@ -154,25 +154,31 @@ const serverOn = async () => {
 }
 
 const androidApi = async (call) => {
+    // Battery Status //
     if (call === 'deviceBattery') {
         try {
             const request = await exec("termux-battery-status");
             const res = JSON.parse(request.stdout);
             return {"status": "ok", "percentage": res.percentage, "temperature": res.temperature.toFixed(0)};
         } catch (err) {
-            return {"status": "fail", "percentage": "", "temperature": ""};
+            return {"status": "fail", "percentage": "0", "temperature": "0"};
         }
     }
+    // Battery Status //
 
+    // mobile_data //
     if (call === 'deviceBtnData') {
         try {
             const request = await exec("su -c 'settings get global mobile_data'");
             const res = JSON.parse(request.stdout);
-            return {"status": "ok", "res": res};
+            const rp = res === 0 ? 'off' : 'on';
+            return {"status": "ok", "res": rp};
         } catch (err) {
-            return {"status": "fail", "res": ""};
+            return {"status": "fail", "res": "off"};
         }
     }
+
+    // mobile_data //
 
     if (call === 'deviceBtnWifi') {
         try {
@@ -180,7 +186,7 @@ const androidApi = async (call) => {
             const res = JSON.parse(request.stdout);
             return {"status": "ok", "res": res};
         } catch (err) {
-            return {"status": "fail", "res": ""};
+            return {"status": "fail", "res": "0"};
         }
     }
 
@@ -190,13 +196,13 @@ const androidApi = async (call) => {
             const res = JSON.parse(request.stdout);
             return {"status": "ok", "res": res};
         } catch (err) {
-            return {"status": "fail", "res": ""};
+            return {"status": "fail", "res": "0"};
         }
     }
 }
 
 ( async () => {
-    const tes = await androidApi('deviceBtnAirplane');
+    const tes = await androidApi('deviceBtnData');
     console.log(tes);
 })();
 
