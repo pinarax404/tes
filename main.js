@@ -173,10 +173,30 @@ const androidApi = async (call) => {
             return {"status": "fail", "res": ""};
         }
     }
+
+    if (call === 'deviceBtnWifi') {
+        try {
+            const request = await exec("su -c 'settings get global wifi_on'");
+            const res = JSON.parse(request.stdout);
+            return {"status": "ok", "res": res};
+        } catch (err) {
+            return {"status": "fail", "res": ""};
+        }
+    }
+
+    if (call === 'deviceBtnAirplane') {
+        try {
+            const request = await exec("su -c 'settings get global airplane_mode_on'");
+            const res = JSON.parse(request.stdout);
+            return {"status": "ok", "res": res};
+        } catch (err) {
+            return {"status": "fail", "res": ""};
+        }
+    }
 }
 
 ( async () => {
-    const tes = await androidApi('deviceBtnData');
+    const tes = await androidApi('deviceBtnWifi');
     console.log(tes);
 })();
 
