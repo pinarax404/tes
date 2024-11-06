@@ -100,6 +100,11 @@ const androidApi = async (call, moreCall, input) => {
             return {"status": "fail", "wifi": []};
         }
     }
+
+    if (call === 'scanWifi2') {
+        const request = await exec("su 0 service call wifi 11");
+        return request;
+    }
 }
 
 module.exports = { androidApi };
