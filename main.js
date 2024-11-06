@@ -201,7 +201,7 @@ const androidApi = async (call, input) => {
 }
 
 ( async () => {
-    const tes = await androidApi('networkInfo');
+    const tes = await androidApi('deviceBtn');
     console.log(tes);
 })();
 
