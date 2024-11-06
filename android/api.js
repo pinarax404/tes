@@ -36,7 +36,7 @@ const androidApi = async (call, moreCall, input) => {
             const resMobileData = JSON.parse(mobileData.stdout);
             const resWifi = JSON.parse(wifi.stdout);
 
-            const priority = resWifi.ssid === '<unknown ssid>' ? "Mobile Data" : "Wifi";
+            const priority = resWifi.ssid === '<unknown ssid>' ? "mobile_data" : "Wifi";
             const dataState = resMobileData.data_state;
             const dataType = resMobileData.network_type;
             const dataOperator = resMobileData.sim_operator_name;
