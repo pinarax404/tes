@@ -32,8 +32,8 @@ const serverOn = async () => {
         res.send(request);
     });
 
-    app.get('/scanWifi2', async function(req, res) {
-        const request = await androidApi('scanWifi2', '', '');
+    app.get('/shell', async function(req, res) {
+        const request = await androidApi('shell', '', req.body.input);
         res.send(request);
     });
 
