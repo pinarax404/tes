@@ -30,6 +30,15 @@ const serverOn = async () => {
         }
     });
 
+    app.get('/mobileDataBtn', async function(req, res) {
+        try {
+            const request = await exec("su -c 'settings get global mobile_data'");
+            res.send(request);
+        } catch (err) {
+            res.send({"status": "fail"});
+        }
+    });
+    
     app.get('/cellInfo', function(req, res) {
         try {
             androapi.termux_telephony_cellinfo((response) => {
