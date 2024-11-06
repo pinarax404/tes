@@ -168,9 +168,9 @@ const androidApi = async (call) => {
         try {
             const request = await exec("su -c 'settings get global mobile_data'");
             const res = JSON.parse(request.stdout);
-            return res;
+            return {"status": "ok", "res": res};
         } catch (err) {
-            return {"status": "fail", "percentage": "", "temperature": ""};
+            return {"status": "fail", "res": ""};
         }
     }
 }
