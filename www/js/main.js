@@ -17,7 +17,7 @@ $(document).on('click', '[name="btnMobileData"]', function() {
 $(document).on('click', '[name="btnWifi"]', function() {
     let shortPress = true;
     const onOff = this.id;
-    var timeout = window.setTimeout(function() {
+    setTimeout(function() {
         shortPress = false;
     }, 1000);
 
@@ -26,10 +26,6 @@ $(document).on('click', '[name="btnWifi"]', function() {
     } else {
         alert('long press');
     }
-
-    $(document).on('mouseup', '[name="btnWifi"]', function() {
-        window.clearTimeout(timeout);
-    });
 });
 
 $(document).on('click', '[name="btnAirplaneMode"]', function() {
