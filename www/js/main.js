@@ -9,7 +9,10 @@ $(document).on('click', '[id="btnMobileData"]', function() {
     const onOff = this.name;
     document.getElementById('btnMobileData').setAttribute('disabled', '');
     $.post('/switchButton', {'name': 'mobileData', 'state': onOff}, function() {
-        $.getJSON('/topButton', function(res) {updateBtn(res)});
+        $.getJSON('/topButton', function(res) {
+            updateBtn(res);
+            document.getElementById('btnMobileData').removeAttribute('disabled');
+        });
     });
 });
 
@@ -31,14 +34,24 @@ $('#btnWifi').on('mouseup', function() {
     if (shortPress == true) {
         document.getElementById('btnWifi').setAttribute('disabled', '');
         const onOff = document.getElementById('btnWifi').getAttribute('name');
-        $.post('/switchButton', {'name': 'wifi', 'state': onOff});
+        $.post('/switchButton', {'name': 'wifi', 'state': onOff}, function() {
+            $.getJSON('/topButton', function(res) {
+                updateBtn(res);
+                document.getElementById('btnWifi').removeAttribute('disabled');
+            });
+        });
     }
 });
 
 $(document).on('click', '[id="btnAirplaneMode"]', function() {
     const onOff = this.name;
     document.getElementById('btnAirplaneMode').setAttribute('disabled', '');
-    $.post('/switchButton', {'name': 'airplane', 'state': onOff});
+    $.post('/switchButton', {'name': 'airplane', 'state': onOff}, function() {
+        $.getJSON('/topButton', function(res) {
+            updateBtn(res);
+            document.getElementById('btnAirplaneMode').removeAttribute('disabled');
+        });
+    });
 });
 
 function updateBtn(res) {
