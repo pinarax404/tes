@@ -155,12 +155,11 @@ const serverOn = async () => {
 
 const androidApi = async (call) => {
     if (call === 'deviceBattery') {
-        try {
-            const req = await exec('termux-battery-status');
-            return {"status": "ok", "data": req.stdout};
-        } catch (err) {
-            return {"status": "fail"};
-        }
+        return new Promise((resolve, reject) => {
+            await androapi.termux_battery_status((response) => {
+                return response;
+            });
+        });
     }
 }
 
