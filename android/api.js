@@ -92,7 +92,7 @@ const androidApi = async (call, moreCall, input) => {
 
     if (call === 'scanWifi') {
         try {
-            await exec("su -c 'am start -a android.net.wifi.WifiManager'");
+            await exec("su -c 'service call wifi 11'");
             const request = await exec("termux-wifi-scaninfo");
             const res = JSON.parse(request.stdout);
 
