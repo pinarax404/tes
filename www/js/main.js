@@ -56,4 +56,6 @@ $(document).on('click', '[name="airplane"]', function() {
     });
 });
 
-function updateBtn
+function updateBtn() {
+
+}
