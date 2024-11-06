@@ -65,8 +65,8 @@ const androidApi = async (call, moreCall, input) => {
         if (moreCall === 'airplane') {
             if (input === 'on') {
                 try {
-                    //await exec("su -c 'svc data disable'");
-                    //await exec("su -c 'svc wifi disable'");
+                    await exec("su -c 'svc data disable'");
+                    await exec("su -c 'svc wifi disable'");
                     await exec("su -c 'settings put global airplane_mode_on 1'");
                     await exec("su -c 'am broadcast -a android.intent.action.AIRPLANE_MODE --ez state true'");
 
@@ -80,7 +80,7 @@ const androidApi = async (call, moreCall, input) => {
                 try {
                     await exec("su -c 'settings put global airplane_mode_on 0'");
                     await exec("su -c 'am broadcast -a android.intent.action.AIRPLANE_MODE --ez state false'");
-                    //await exec("su -c 'svc data enable'");
+                    await exec("su -c 'svc data enable'");
 
                     return {"status": "ok"};
                 } catch (err) {
