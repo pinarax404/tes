@@ -5,15 +5,15 @@ const androapi = require('termux-api-library');
 const androidApi = async (call, moreCall, input) => {
     if (call === 'deviceBtn') {
         try {
-            const [mobileData, wifi, airplane] = await Promise.all([exec("su -c 'settings get global mobile_data'"), exec("su -c 'settings get global wifi_on'"), exec("su -c 'settings get global airplane_mode_on'")]);
+            const [mobileData, wifi, airplane, battery] = await Promise.all([exec("su -c 'settings get global mobile_data'"), exec("su -c 'settings get global wifi_on'"), exec("su -c 'settings get global airplane_mode_on'"), exec("termux-battery-status")]);
 
             const btnData = JSON.parse(mobileData.stdout) === 0 ? 'off' : 'on';
             const btnWifi = JSON.parse(wifi.stdout) === 0 ? 'off' : 'on';
             const btnAirplane = JSON.parse(airplane.stdout) === 0 ? 'off' : 'on';
 
-            return {"status": "ok", "btnData": btnData, "btnWifi": btnWifi, "btnAirplane": btnAirplane};
+            return {"status": "ok", "btnData": btnData, "btnWifi": btnWifi, "btnAirplane": btnAirplane, "battery": battery.percentage + "%"};
         } catch (err) {
-            return {"status": "fail", "btnData": "off", "btnWifi": "off", "btnAirplane": "off"};
+            return {"status": "fail", "btnData": "off", "btnWifi": "off", "btnAirplane": "off", "battery": "null"};
         }
     }
 
