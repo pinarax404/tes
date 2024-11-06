@@ -20,24 +20,27 @@
 		}
 	</style>
 </head>
-<body onload="btnLoad()">
+<body>
 	<div style="margin-top: 10px; margin-left: auto; margin-right: auto; width: 380px; border: 1px solid #E3E3E3; padding: 10px; background-color: #F9F9F9; text-align: center;">
-		<b style="float: left;">ADB > Connect 192.168.42.129:3000</b>
+		<b id="adbHost" style="float: left;">ADB > Connect null</b>
 		<hr style="border: 1px solid red;">
-		<div id="btn-atas">
-			<button type="button" class="btn" style="width: 110px; height: 105px; border-radius: 20px;">
-				<i class="fa fa-signal" id="mobile_data_icon" style="font-size: 48px; color: black"></i>
-				<p style="font-weight: bold; font-size: 12px; margin-top: 5px;">Mobile<br>data</p>
-			</button>
-			<button type="button" class="btn" style="width: 110px; height: 105px; border-radius: 20px; margin-left: 5px;">
-				<i class="fa fa-wifi" id="wifi_icon" style="font-size: 48px; color: black"></i>
-				<p style="font-weight: bold; font-size: 12px; margin-top: 5px;">Wifi</p>
-			</button>
-			<button type="button" class="btn" style="width: 110px; height: 105px; border-radius: 20px; margin-left: 5px;">
-				<i class="fa fa-plane" id="airplane_mode_icon" style="font-size: 48px; color: black"></i>
-				<p style="font-weight: bold; font-size: 12px; margin-top: 5px;">Airplane<br>Mode</p>
-			</button>
-		</div>
+		<button type="button" class="btn" name="btnMobileData" id="" style="width: 110px; height: 105px; border-radius: 20px;">
+			<i class="fa fa-signal" id="mobileData_icon" style="font-size: 48px; color: black"></i>
+			<p style="font-weight: bold; font-size: 12px; margin-top: 5px;">Mobile<br>data</p>
+		</button>
+		<button type="button" class="btn" name="btnWifi" id="" style="width: 110px; height: 105px; border-radius: 20px; margin-left: 5px;">
+			<i class="fa fa-wifi" id="wifi_icon" style="font-size: 48px; color: black"></i>
+			<p style="font-weight: bold; font-size: 12px; margin-top: 5px;">Wifi</p>
+		</button>
+		<button type="button" class="btn" name="btnAirplaneMode" id="" style="width: 110px; height: 105px; border-radius: 20px; margin-left: 5px;">
+			<i class="fa fa-plane" id="airplaneMode_icon" style="font-size: 48px; color: black"></i>
+			<p style="font-weight: bold; font-size: 12px; margin-top: 5px;">Airplane<br>Mode</p>
+		</button>
+
+		<button type="button" class="btn" name="btnChangeIp" id="" style="width: 110px; height: 105px; border-radius: 20px;">
+			<i class="fa fa-signal" id="changeIp_icon" style="font-size: 48px; color: black"></i>
+			<p style="font-weight: bold; font-size: 12px; margin-top: 5px;">Change<br>IP</p>
+		</button>
 		<hr>
 		<span type="button" class="btn btn-white w-100 align-items-stretch d-flex" style="width: 358px; background-color: #EBEBEB;">
 			<b style="float: left;">Battery</b>
@@ -49,6 +52,7 @@
 		</span>
 	</div>
 	<script type="text/javascript">
+		document.getElementById('adbHost').innerHTML = `ADB > Connect ${window.location.host}`;
 		const updateBTN = (json) => {
 			let html = `<button type="button" class="btn" name="mobile_data" id="${json.mobile_data.id}" style="width: 110px; height: 105px; border-radius: 20px;">`;
 				html += `<i class="fa fa-signal" style="font-size: 48px; color: ${json.mobile_data.color};"></i>`;
