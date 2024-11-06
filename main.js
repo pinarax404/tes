@@ -22,28 +22,6 @@ const serverOn = async () => {
 
     // =========== get btn action ===========
 
-    app.get('/getDeviceInfo', function(req, res) {
-        let dump = {'battery': '', 'mobile_data': '', 'wifi': '', 'airplane': ''};
-        try {
-            androapi.termux_battery_status(async function(reqBattery) {
-                dump['battery'] = reqBattery;
-
-                const reqMobile_data = await exec("su -c 'settings get global mobile_data'");
-                dump['mobile_data'] = reqMobile_data.stdout.trim();
-
-                const reqWifi_on = await exec("su -c 'settings get global wifi_on'");
-                dump['wifi'] = reqWifi_on.stdout.trim();
-
-                const reqAirplane = await exec("su -c 'settings get global airplane_mode_on'");
-                dump['airplane'] = reqAirplane.stdout.trim();
-
-                res.send(dump);
-            });
-        } catch (err) {
-            res.send({"status": "fail"});
-        }
-    });
-
     app.get('/getBatteryInfo', function(req, res) {
         try {
             androapi.termux_battery_status((response) => {
