@@ -18,7 +18,7 @@ $('#btnWifi').on('mousedown', function() {
     shortPress = true;
     timer = setTimeout(function() {
         shortPress = false;
-        $.post('/switchButton', {'name': 'wifi', 'state': onOff}, function() {
+        $.post('/switchButton', {'name': 'wifi', 'state': 'on'}, function() {
             $.getJSON('/scanWifi', function(res) {updateWifiList(res)});
         });
     }, 500);
