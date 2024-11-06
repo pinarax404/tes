@@ -21,7 +21,7 @@ const serverOn = async () => {
     });
 
     // =========== btn action
-    app.get('/batteryInfo', function(req, res) {
+    app.get('/getBatteryInfo', function(req, res) {
         try {
             androapi.termux_battery_status((response) => {
                 res.send(response);
@@ -31,7 +31,7 @@ const serverOn = async () => {
         }
     });
 
-    app.get('/mobileDataBtn', async function(req, res) {
+    app.get('/getMobileDataBtn', async function(req, res) {
         try {
             const request = await exec("su -c 'settings get global mobile_data'");
             res.send(request.stdout.trim());
@@ -40,7 +40,7 @@ const serverOn = async () => {
         }
     });
 
-    app.get('/wifiBtn', async function(req, res) {
+    app.get('/getWifiBtn', async function(req, res) {
         try {
             const request = await exec("su -c 'settings get global wifi_on'");
             res.send(request.stdout.trim());
