@@ -17,8 +17,6 @@ const serverOn = async () => {
         res.sendFile(path.join(__dirname, './www', 'index.html'));
     });
 
-    // =========== get btn action ===========
-
     app.get('/getBatteryInfo', function(req, res) {
         try {
             androapi.termux_battery_status((response) => {
