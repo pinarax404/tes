@@ -63,14 +63,14 @@ const serverOn = async () => {
     // =========== set btn action ===========
 
     app.post('/setMobileDataBtn', async function(req, res) {
-        if (req.body.attr === false) {
+        if (req.body.attr === 'false') {
             try {
                 await exec("su -c 'svc data disable'");
                 res.send({"status": "success"});
             } catch (err) {
                 res.send({"status": "fail"});
             }
-        } else if (req.body.attr === true) {
+        } else if (req.body.attr === 'true') {
             try {
                 await exec("su -c 'svc data enable'");
                 res.send({"status": "success"});
