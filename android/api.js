@@ -92,6 +92,8 @@ const androidApi = async (call, moreCall, input) => {
 
     if (call === 'scanWifi') {
         try {
+            await exec("termux-wifi-enable false");
+            await exec("termux-wifi-enable true");
             const request = await exec("termux-wifi-scaninfo");
             const res = JSON.parse(request.stdout);
 
