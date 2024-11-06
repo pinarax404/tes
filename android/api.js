@@ -53,7 +53,6 @@ const androidApi = async (call, moreCall, input) => {
 
         if (moreCall === 'wifi') {
             try {
-                //const command = input === 'on' ? "termux-wifi-enable true" : "termux-wifi-enable false";
                 const command = input === 'on' ? "su -c 'svc wifi enable'" : "su -c 'svc wifi disable'";
                 await exec(command);
 
@@ -93,7 +92,6 @@ const androidApi = async (call, moreCall, input) => {
 
     if (call === 'scanWifi') {
         try {
-            //await exec("su -c 'service call wifi 11'");
             const request = await exec("termux-wifi-scaninfo");
             const res = JSON.parse(request.stdout);
 
