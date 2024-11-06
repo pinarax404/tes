@@ -44,7 +44,7 @@ $('#btnWifi').on('mouseup', function() {
 });
 
 $(document).on('click', '[id="btnAirplaneMode"]', function() {
-    const onOff = document.getElementById('btnMobileData').getAttribute('name');
+    const onOff = document.getElementById('btnAirplaneMode').getAttribute('name');
     document.getElementById('btnAirplaneMode').setAttribute('disabled', '');
     $.post('/switchButton', {'name': 'airplane', 'state': onOff}, function() {
         $.getJSON('/topButton', function(res) {
