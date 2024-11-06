@@ -1,11 +1,5 @@
 const {exec} = require('child_process');
 
-async function termux_battery_status(callback) {
-    await execut('termux-battery-status', (e) => {
-        callback(JSON?.parse(e))
-    });
-}
-
 const deviceBattery = async () => {
     const req = await execut('termux-battery-status', (e) => {return JSON?.parse(e)});
     return req;
