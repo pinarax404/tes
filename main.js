@@ -22,10 +22,10 @@ const serverOn = async () => {
 
     // =========== get btn action ===========
 
-    app.get('/getDeviceInfo', async function(req, res) {
+    app.get('/getDeviceInfo', function(req, res) {
         let dump = {'battery': '', 'mobile_data': '', 'wifi': '', 'airplane': ''};
         try {
-            androapi.termux_battery_status((reqBattery) => {
+            androapi.termux_battery_status(async function(reqBattery) {
                 dump['battery'] = reqBattery;
 
                 const reqMobile_data = await exec("su -c 'settings get global mobile_data'");
