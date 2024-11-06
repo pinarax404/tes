@@ -11,8 +11,22 @@ $(document).on('click', '[name="btnMobileData"]', function() {
     $.post('/switchButton', {'name': 'mobileData', 'state': onOff});
 });
 
-$(document).on('click', '[name="btnWifi"]', function() {
-    (longpress) ? alert("Long Press") : alert("Short Press");
+$(document).ready(function() {
+    var longpress = false;
+
+    $("btnWifi").on('click', function() {
+        (longpress) ? alert("Long Press"): alert("Short Press");
+    });
+
+    var startTime, endTime;
+    $("btnWifi").on('mousedown', function() {
+        startTime = new Date().getTime();
+    });
+
+    $("btnWifi").on('mouseup', function() {
+        endTime = new Date().getTime();
+        longpress = (endTime - startTime < 500) ? false : true;
+    });
 });
 
 $(document).on('click', '[name="btnAirplaneMode"]', function() {
