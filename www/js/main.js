@@ -1,3 +1,6 @@
+var longpress = false;
+var startTime, endTime;
+
 document.getElementById('adbHost').innerHTML = `ADB > ${window.location.host}`;
 
 $(document).ready(function() {
@@ -11,22 +14,16 @@ $(document).on('click', '[name="btnMobileData"]', function() {
     $.post('/switchButton', {'name': 'mobileData', 'state': onOff});
 });
 
-$(document).ready(function() {
-    var longpress = false;
-
-    $('[name="btnWifi"]').on('click', function() {
-        (longpress) ? alert("Long Press"): alert("Short Press");
-    });
-
-    var startTime, endTime;
-    $('[name="btnWifi"]').on('mousedown', function() {
-        startTime = new Date().getTime();
-    });
-
-    $('[name="btnWifi"]').on('mouseup', function() {
-        endTime = new Date().getTime();
-        longpress = (endTime - startTime < 500) ? false : true;
-    });
+$('[name="btnWifi"]').on('click', function() {
+    const onOff = this.id;
+    (longpress) ? alert("Long Press-" + onOff): alert("Short Press-" + onOff);
+});
+$('[name="btnWifi"]').on('mousedown', function() {
+    startTime = new Date().getTime();
+});
+$('[name="btnWifi"]').on('mouseup', function() {
+    endTime = new Date().getTime();
+    longpress = (endTime - startTime < 500) ? false : true;
 });
 
 $(document).on('click', '[name="btnAirplaneMode"]', function() {
