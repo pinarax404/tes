@@ -8,7 +8,9 @@ $(document).ready(function() {
 $(document).on('click', '[id="btnMobileData"]', function() {
     const onOff = this.name;
     document.getElementById('btnMobileData').setAttribute('disabled', '');
-    $.post('/switchButton', {'name': 'mobileData', 'state': onOff});
+    $.post('/switchButton', {'name': 'mobileData', 'state': onOff}, function() {
+        $.getJSON('/topButton', function(res) {updateBtn(res)});
+    });
 });
 
 let shortPress = true;
