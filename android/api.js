@@ -5,16 +5,15 @@ const androapi = require('termux-api-library');
 const androidApi = async (call, moreCall, input) => {
     if (call === 'deviceBtn') {
         try {
-            const [mobileData, wifi, airplane, battery] = await Promise.all([exec("su -c 'settings get global mobile_data'"), exec("su -c 'settings get global wifi_on'"), exec("su -c 'settings get global airplane_mode_on'"), exec("termux-battery-status")]);
+            const [mobileData, wifi, airplane, battery] = await Promise.all([exec("su -c 'settings get global mobile_data'"), exec("su -c 'settings get global wifi_on'"), exec("su -c 'settings get global airplane_mode_on'")]);
 
             const btnData = JSON.parse(mobileData.stdout) === 0 ? 'off' : 'on';
             const btnWifi = JSON.parse(wifi.stdout) === 0 ? 'off' : 'on';
             const btnAirplane = JSON.parse(airplane.stdout) === 0 ? 'off' : 'on';
-            const batt = JSON.parse(battery.stdout);
 
-            return {"status": "ok", "btnData": btnData, "btnWifi": btnWifi, "btnAirplane": btnAirplane, "battery": batt.percentage + "%"};
+            return {"status": "ok", "btnData": btnData, "btnWifi": btnWifi, "btnAirplane": btnAirplane};
         } catch (err) {
-            return {"status": "fail", "btnData": "off", "btnWifi": "off", "btnAirplane": "off", "battery": "null"};
+            return {"status": "fail", "btnData": "off", "btnWifi": "off", "btnAirplane": "off"};
         }
     }
 
@@ -22,9 +21,11 @@ const androidApi = async (call, moreCall, input) => {
         try {
             const mobileData = await exec("termux-telephony-deviceinfo");
             const wifi = await exec("termux-wifi-connectioninfo");
+            const batt = await exec("termux-battery-status");
 
             const resMobileData = JSON.parse(mobileData.stdout);
             const resWifi = JSON.parse(wifi.stdout);
+            const resBatt = JSON.parse(wifi.stdout);
 
             const priority = resWifi.ssid === '<unknown ssid>' ? "mobile_data" : "wifi";
             const dataState = resMobileData.data_state === 'disconnected' ? "Disconnected" : "Connected";
@@ -33,9 +34,9 @@ const androidApi = async (call, moreCall, input) => {
             const wifiState = resWifi.ssid === '<unknown ssid>' ? "Disconnected" : "Connected";
             const wifiSsid = resWifi.ssid;
 
-            return {"status": "ok", "priority": priority, "dataState": dataState, "dataType": dataType, "dataOperator": dataOperator, "wifiState": wifiState, "wifiSsid": wifiSsid};
+            return {"status": "ok", "priority": priority, "dataState": dataState, "dataType": dataType, "dataOperator": dataOperator, "wifiState": wifiState, "wifiSsid": wifiSsid, "battery": resBatt.percentage + "%"};
         } catch (err) {
-            return {"status": "fail", "priority": "null", "dataState": "null", "dataType": "null", "dataOperator": "null", "wifiState": "null", "wifiSsid": "null"};
+            return {"status": "fail", "priority": "null", "dataState": "null", "dataType": "null", "dataOperator": "null", "wifiState": "null", "wifiSsid": "null", "battery": "null"};
         }
     }
 
