@@ -14,19 +14,7 @@ $(document).on('click', '[name="btnMobileData"]', function() {
     $.post('/switchButton', {'name': 'mobileData', 'state': onOff});
 });
 
-$(document).on('click', '[name="btnWifi"]', function() {
-    let shortPress = true;
-    const onOff = this.id;
-    setTimeout(function() {
-        shortPress = false;
-    }, 1000);
 
-    if (shortPress === true ) {
-        alert('short press');
-    } else {
-        alert('long press');
-    }
-});
 
 $(document).on('click', '[name="btnAirplaneMode"]', function() {
     const onOff = this.id;
