@@ -3,7 +3,7 @@ const app = express();
 const server = require('http').Server(app);
 const bodyParser = require('body-parser');
 const path = require('path');
-const fetch = require('node-fetch');
+const { androidApi } = require('./android/api.js');
 
 const serverOn = async () => {
     server.listen(3000, () => {
@@ -17,14 +17,9 @@ const serverOn = async () => {
         res.sendFile(path.join(__dirname, './www', 'index.html'));
     });
 
-    app.get('/getBatteryInfo', function(req, res) {
-        try {
-            androapi.termux_battery_status((response) => {
-                res.send({"status": "success", "value": response});
-            });
-        } catch (err) {
-            res.send({"status": "fail"});
-        }
+    app.get('/networkButton', async function(req, res) {
+        const request = await androidApi('deviceBtn', '', '');
+        res.send(request);
     });
 
     app.post('/setAirplaneBtn', async function(req, res) {
