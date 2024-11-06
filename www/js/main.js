@@ -79,21 +79,22 @@ function updateWifiList() {
     let count = 0;
     load();
     function load() {
-        $.getJSON('/scanWifi', function(res) {
-            if (res.status === 'ok') {
-                if (count != res.wifi.length) {
-                    count = res.wifi.length;
-                    document.getElementById('modalResult').innerHTML = '';
-                    for (let i = 0; i < res.wifi.length; i++) {
-                        document.getElementById('modalResult').innerHTML += `<span type="button" class="btn btn-white w-100 align-items-stretch d-flex" style="width: 358px; background-color: #EBEBEB;"><b style="float: left;"><i class="fa fa-wifi" id="wifi_icon" style="color: dodgerblue;"></i> ${res.wifi[i].ssid}</b><b style="float: right;">Connect</b></span>`;
+        const cls = document.getElementById('mainModal').getAttribute('class');
+        if (cls === 'modal fade in') {
+            $.getJSON('/scanWifi', function(res) {
+                if (res.status === 'ok') {
+                    if (count != res.wifi.length) {
+                        count = res.wifi.length;
+                        document.getElementById('modalResult').innerHTML = '';
+                        for (let i = 0; i < res.wifi.length; i++) {
+                            document.getElementById('modalResult').innerHTML += `<span type="button" class="btn btn-white w-100 align-items-stretch d-flex" style="width: 350px; background-color: #EBEBEB;"><b style="float: left;"><i class="fa fa-wifi" id="wifi_icon" style="color: dodgerblue;"></i> ${res.wifi[i].ssid}</b><b style="float: right;">Connect</b></span>`;
+                        }
                     }
+                    setTimeout(function() {load()}, 3000);
+                } else {
+                    document.getElementById('modalResult').innerHTML = `<span type="button" class="btn btn-white w-100 align-items-stretch d-flex" style="width: 350px; background-color: #EBEBEB;"><center><b style="color: red;">Network Priority</b></center></span>`;
                 }
-                setTimeout(function() {
-                    load();
-                }, 5000);
-            } else {
-                document.getElementById('modalResult').innerHTML = `<span type="button" class="btn btn-white w-100 align-items-stretch d-flex" style="width: 358px; background-color: #EBEBEB;"><center><b style="color: red;">Network Priority</b></center></span>`;
-            }
-        });
+            });
+        }
     }
 }
