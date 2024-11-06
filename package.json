@@ -1,7 +1,7 @@
 {
-    "name": "open_wrt_server",
+    "name": "android_bfr_web_ui",
     "version": "1.0.0",
-    "description": "open_wrt_server",
+    "description": "android_bfr_web_ui",
     "main": "main.js",
     "scripts": {
         "start": "node main.js",
