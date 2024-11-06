@@ -67,7 +67,7 @@ const androidApi = async (call, moreCall, input) => {
             if (input === 'on') {
                 try {
                     await exec("su -c 'svc data disable'");
-                    await exec("termux-wifi-enable false");
+                    await exec("su -c 'svc wifi disable'");
                     await exec("su -c 'settings put global airplane_mode_on 1'");
                     await exec("su -c 'am broadcast -a android.intent.action.AIRPLANE_MODE --ez state true'");
 
@@ -79,9 +79,9 @@ const androidApi = async (call, moreCall, input) => {
 
             if (input === 'off') {
                 try {
-                    await exec("su -c 'svc data enable'");
                     await exec("su -c 'settings put global airplane_mode_on 0'");
                     await exec("su -c 'am broadcast -a android.intent.action.AIRPLANE_MODE --ez state false'");
+                    await exec("su -c 'svc data enable'");
 
                     return {"status": "ok"};
                 } catch (err) {
@@ -93,7 +93,7 @@ const androidApi = async (call, moreCall, input) => {
 
     if (call === 'scanWifi') {
         try {
-            await exec("su -c 'service call wifi 11'");
+            //await exec("su -c 'service call wifi 11'");
             const request = await exec("termux-wifi-scaninfo");
             const res = JSON.parse(request.stdout);
 
