@@ -71,7 +71,6 @@ function updateBtn(res) {
         const airplaneId = res.btnAirplane === 'on' ? 'off' : 'on';
         const airplaneICon = res.btnAirplane === 'on' ? 'font-size: 48px; color: dodgerblue;' : 'font-size: 48px; color: black;';
 
-        document.getElementById('battery').innerHTML = `${res.battery} <i class="fa fa-battery-0" style="color: black"></i>`;
         document.getElementById('btnMobileData').setAttribute('name', mobileDataId);
         document.getElementById('mobileData_icon').setAttribute('style', mobileDataICon);
         document.getElementById('btnWifi').setAttribute('name', wifiId);
@@ -83,6 +82,8 @@ function updateBtn(res) {
 
 function updateNetwork(res) {
     if (res.status === 'ok') {
+        document.getElementById('battery').innerHTML = `${res.battery} <i class="fa fa-battery-0" style="color: black"></i>`;
+
         if (res.priority === 'mobile_data') {
             document.getElementById('networkInfo').innerHTML = `<span type="button" class="btn btn-white w-100 align-items-stretch d-flex" style="width: 358px; background-color: #EBEBEB;"><b style="float: left;">Network Priority</b><b style="float: right;">Mobile Data</b></span>`;
             document.getElementById('networkInfo').innerHTML += `<span type="button" class="btn btn-white w-100 align-items-stretch d-flex" style="width: 358px; background-color: #EBEBEB;"><b style="float: left;">Status</b><b style="float: right;">${res.dataState}</b></span>`;
