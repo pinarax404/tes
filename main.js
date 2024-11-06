@@ -20,9 +20,9 @@ const serverOn = async () => {
         res.sendFile(path.join(__dirname, './www', 'index.html'));
     });
 
-    app.get('/callbackDevice', function(req, res) {
+    app.get('/battery', function(req, res) {
         try {
-            androapi[req.query.api]((response) => {
+            androapi.termux_battery_status((response) => {
                 res.send(response);
             });
         } catch (err) {
