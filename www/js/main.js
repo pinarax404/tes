@@ -1,10 +1,6 @@
 document.getElementById('adbHost').innerHTML = `ADB > ${window.location.host}`;
 
 $(document).ready(function() {
-    $.getJSON('/battery', function(res) {
-        document.getElementById('battery').innerHTML = `${res.percentage}% <i class="fa fa-battery-0" style="color: black"></i>`;
-    });
-
     $.getJSON('/topButton', function(res) {
         const mobileDataId = res.btnData === 'on' ? 'off' : 'on';
         const mobileDataICon = res.btnData === 'on' ? 'font-size: 48px; color: dodgerblue;' : 'font-size: 48px; color: black;';
@@ -13,6 +9,7 @@ $(document).ready(function() {
         const airplaneId = res.btnAirplane === 'on' ? 'off' : 'on';
         const airplaneICon = res.btnAirplane === 'on' ? 'font-size: 48px; color: dodgerblue;' : 'font-size: 48px; color: black;';
 
+        document.getElementById('battery').innerHTML = `${res.battery}% <i class="fa fa-battery-0" style="color: black"></i>`;
         document.getElementsByName('btnMobileData')[0].setAttribute('id', mobileDataId);
         document.getElementById('mobileData_icon').setAttribute('style', mobileDataICon);
         document.getElementsByName('btnWifi')[0].setAttribute('id', wifiId);
