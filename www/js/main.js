@@ -11,6 +11,23 @@ $(document).on('click', '[id="btnMobileData"]', function() {
     $.post('/switchButton', {'name': 'mobileData', 'state': onOff});
 });
 
+let shortPress = true;
+let timer;
+$('#btnWifi').on('mousedown', function() {
+    shortPress = true;
+    timer = setTimeout(function() {
+        shortPress = false;
+        alert('Long Press');
+    }, 1000);
+});
+
+$('#btnWifi').on('mouseup', function() {
+    clearTimeout(timer);
+    if (shortPress == true) {
+        alert('Short Press');
+    }
+});
+
 $(document).on('click', '[id="btnAirplaneMode"]', function() {
     const onOff = this.name;
     document.getElementById('btnAirplaneMode').setAttribute('disabled', '');
