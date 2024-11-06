@@ -12,9 +12,7 @@ $(document).on('click', '[name="btnMobileData"]', function() {
 });
 
 $(document).on('click', '[name="btnWifi"]', function() {
-    const onOff = this.id;
-    document.getElementsByName('btnWifi')[0].setAttribute('disabled', '');
-    $.post('/switchButton', {'name': 'wifi', 'state': onOff});
+    (longpress) ? alert("Long Press") : alert("Short Press");
 });
 
 $(document).on('click', '[name="btnAirplaneMode"]', function() {
