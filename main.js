@@ -49,6 +49,16 @@ const serverOn = async () => {
             res.send({"status": "fail"});
         }
     });
+
+    app.get('/deviceinfo', function(req, res) {
+        try {
+            androapi.termux_telephony_deviceinfo((response) => {
+                res.send(response);
+            });
+        } catch (err) {
+            res.send({"status": "fail"});
+        }
+    });
 }
 
 serverOn();
