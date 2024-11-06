@@ -20,7 +20,7 @@ const serverOn = async () => {
         res.sendFile(path.join(__dirname, './www', 'index.html'));
     });
 
-    await androapi.termux_battery_status((e) => {
+    androapi.termux_battery_status((e) => {
         console.log(e);
     });
 }
