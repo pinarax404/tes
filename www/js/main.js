@@ -24,7 +24,8 @@ $('#btnWifi').on('mousedown', function() {
 $('#btnWifi').on('mouseup', function() {
     clearTimeout(timer);
     if (shortPress == true) {
-        alert('Short Press');
+        const onOff = document.getElementById('btnWifi').getAttribute('name');
+        $.post('/switchButton', {'name': 'wifi', 'state': onOff});
     }
 });
 
