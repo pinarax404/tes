@@ -3,9 +3,7 @@ document.getElementById('adbHost').innerHTML = `ADB > ${window.location.host}`;
 $(document).ready(function() {
     $.getJSON('/topButton', function(res) {updateBtn(res)});
 
-    $.getJSON('/network', function(res) {
-
-    });
+    $.getJSON('/network', function(res) {updateNetwork(res)});
 });
 
 $(document).on('click', '[name="mobile_data"]', function() {
