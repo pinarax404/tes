@@ -22,7 +22,7 @@ const androidApi = async (call, moreCall, input) => {
             const request = await exec("termux-battery-status");
             const res = JSON.parse(request.stdout);
 
-            return {"status": "ok", "percentage": res.percentage, "temperature": res.temperature.toFixed(0)};
+            return {"status": "ok", "percentage": res.percentage, "temperature": res.temperature};
         } catch (err) {
             return {"status": "fail", "percentage": "null", "temperature": "null"};
         }
