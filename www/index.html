@@ -7,7 +7,6 @@
 	<link rel="stylesheet" href="css/font-awesome.min.css">
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js" type="text/javascript"></script>
-	<script src="js/main.js" type="text/javascript"></script>
 	<style>
 		body {
 			background-color: buttonface;
@@ -50,95 +49,16 @@
 			<p style="font-weight: bold; font-size: 12px; margin-top: 5px;">Power Off</p>
 		</button>
 		<hr>
+		<div id="networkInfo"></div>
 		<span type="button" class="btn btn-white w-100 align-items-stretch d-flex" style="width: 358px; background-color: #EBEBEB;">
-			<b style="float: left;">Battery</b>
-			<b id="battery" style="float: right;">--</b>
+			<b style="float: left;">Network Priority</b>
+			<b id="networkPriority" style="float: right;">--</b>
 		</span>
 		<span type="button" class="btn btn-white w-100 align-items-stretch d-flex" style="width: 358px; background-color: #EBEBEB;">
-			<b style="float: left;">Connection</b>
-			<b style="float: right;">--</b>
+			<b style="float: left;">Network Priority</b>
+			<b id="networkPriority" style="float: right;">--</b>
 		</span>
 	</div>
-	<script type="text/javascript">
-		document.getElementById('adbHost').innerHTML = `ADB > ${window.location.host}`;
-
-		$(document).ready(function() {
-			$.getJSON('/battery', function(res) {
-				document.getElementById('battery').innerHTML = `${res.percentage}% <i class="fa fa-battery-0" style="color: black"></i>`;
-			});
-
-			$.getJSON('/topButton', function(res) {
-				const mobileDataId = res.btnData === 'on' ? 'off' : 'on';
-				const mobileDataICon = res.btnData === 'on' ? 'font-size: 48px; color: dodgerblue;' : 'font-size: 48px; color: black;';
-				const wifiId = res.btnWifi === 'on' ? 'off' : 'on';
-				const wifiICon = res.btnWifi === 'on' ? 'font-size: 48px; color: dodgerblue;' : 'font-size: 48px; color: black;';
-				const airplaneId = res.btnAirplane === 'on' ? 'off' : 'on';
-				const airplaneICon = res.btnAirplane === 'on' ? 'font-size: 48px; color: dodgerblue;' : 'font-size: 48px; color: black;';
-
-				document.getElementsByName('btnMobileData')[0].setAttribute('id', mobileDataId);
-				document.getElementById('mobileData_icon').setAttribute('style', mobileDataICon);
-				document.getElementsByName('btnWifi')[0].setAttribute('id', wifiId);
-				document.getElementById('wifi_icon').setAttribute('style', wifiICon);
-				document.getElementsByName('btnAirplaneMode')[0].setAttribute('id', airplaneId);
-				document.getElementById('airplaneMode_icon').setAttribute('style', airplaneICon);
-			});
-		});
-		
-		const updateBTN = (json) => {
-			let html = `<button type="button" class="btn" name="mobile_data" id="${json.mobile_data.id}" style="width: 110px; height: 105px; border-radius: 20px;">`;
-				html += `<i class="fa fa-signal" style="font-size: 48px; color: ${json.mobile_data.color};"></i>`;
-				html += `<p style="font-weight: bold; font-size: 12px; margin-top: 5px;">Mobile<br>data</p>`;
-				html += `</button>`;
-				html += `<button type="button" class="btn" name="wifi" id="${json.wifi.id}" style="width: 110px; height: 105px; border-radius: 20px; margin-left: 8px;">`;
-				html += `<i class="fa fa-wifi" style="font-size: 48px; color: ${json.wifi.color};"></i>`;
-				html += `<p style="font-weight: bold; font-size: 12px; margin-top: 5px;">Wifi</p>`;
-				html += `</button>`;
-				html += `<button type="button" class="btn" name="airplane" id="${json.airplane.id}" style="width: 110px; height: 105px; border-radius: 20px; margin-left: 8px;">`;
-				html += `<i class="fa fa-plane" style="font-size: 48px; color: ${json.airplane.color};"></i>`;
-				html += `<p style="font-weight: bold; font-size: 12px; margin-top: 5px;">Airplane<br>Mode</p>`;
-				html += `</button>`;
-			document.getElementById('btn-atas').innerHTML = html;
-		}
-
-		const btnLoad = () => {
-			$.getJSON('/buttonAttr', function(res) {
-				const mobile_data_id = res.mobile_data.power === 'on' ? 'off' : 'on';
-				const mobile_data_color = res.mobile_data.power === 'on' ? 'dodgerblue' : 'black';
-				const wifi_id = res.wifi.power === 'on' ? 'off' : 'on';
-				const wifi_color = res.wifi.power === 'on' ? 'dodgerblue' : 'black';
-				const airplane_id = res.airplane.power === 'on' ? 'off' : 'on';
-				const airplane_color = res.airplane.power === 'on' ? 'dodgerblue' : 'black';
-				updateBTN({mobile_data: {id: mobile_data_id, color: mobile_data_color}, wifi: {id: wifi_id, color: wifi_color}, airplane: {id: airplane_id, color: airplane_color}})
-			});
-
-			$.getJSON('/battery', function(res) {
-				document.getElementById('battery').innerHTML = res.battery.value;
-			});
-		}
-
-		$(document).on('click', '[name="mobile_data"]', function() {
-			const onOff = this.id;
-			document.getElementsByName('mobile_data')[0].setAttribute('disabled', '');
-			$.post('/mobile_data', {'set': onOff}, function() {
-				btnLoad();
-			});
-		});
-
-		$(document).on('click', '[name="wifi"]', function() {
-			const onOff = this.id;
-			document.getElementsByName('wifi')[0].setAttribute('disabled', '');
-			$.post('/wifi', {'set': onOff}, function() {
-				btnLoad();
-			});
-		});
-
-		$(document).on('click', '[name="airplane"]', function() {
-			const onOff = this.id;
-			document.getElementsByName('airplane')[0].setAttribute('disabled', '');
-			$.post('/airplane', {'set': onOff}, function() {
-				btnLoad();
-			});
-		});
-	</script>
+	<script src="js/main.js" type="text/javascript"></script>
 </body>
 </html>
