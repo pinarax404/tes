@@ -16,7 +16,7 @@ $(document).on('click', '[name="btnMobileData"]', function() {
 
 $('[name="btnWifi"]').on('click', function() {
     const onOff = this.id;
-    (longpress) ? alert("Long Press-" + onOff): alert("Short Press-" + onOff);
+    (longpress) ? $.post('/switchButton', {'name': 'wifi', 'state': onOff}) : $.get('/scanWifi', {});
 });
 $('[name="btnWifi"]').on('mousedown', function() {
     startTime = new Date().getTime();
