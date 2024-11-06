@@ -18,17 +18,6 @@ const androidApi = async (call, moreCall, input) => {
         }
     }
 
-    if (call === 'deviceBattery') {
-        try {
-            const request = await exec("termux-battery-status");
-            const res = JSON.parse(request.stdout);
-
-            return {"status": "ok", "percentage": res.percentage, "temperature": res.temperature};
-        } catch (err) {
-            return {"status": "fail", "percentage": "null", "temperature": "null"};
-        }
-    }
-
     if (call === 'networkInfo') {
         try {
             const mobileData = await exec("termux-telephony-deviceinfo");
