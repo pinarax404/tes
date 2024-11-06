@@ -70,7 +70,7 @@ const serverOn = async () => {
         }
     });
 
-    app.post('/buttonWifi', function(req, res) {
+    app.post('/buttonWifi', async function(req, res) {
         try {
             await androapi.termux_wifi_enable(req.body.attr);
             res.send({"status": "success"});
