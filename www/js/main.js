@@ -76,13 +76,15 @@ function updateNetwork(res) {
 
 function updateWifiList() {
     $('#mainModal').modal('show');
-    let count = 0;
+    let check1 = '';
     load();
     function load() {
         $.getJSON('/scanWifi', function(res) {
             if (res.status === 'ok') {
-                if (count != res.wifi.length) {
-                    count = res.wifi.length;
+                let check2 = '';
+                for (let i = 0; i < res.wifi.length; i++) {check2 += res.wifi[i].ssid + '|'}
+                if (check1 != check2) {
+                    check1 = check2;
                     document.getElementById('modalResult').innerHTML = '';
                     for (let i = 0; i < res.wifi.length; i++) {
                         document.getElementById('modalResult').innerHTML += `<span type="button" class="btn btn-white w-100 align-items-stretch d-flex" style="width: 350px; background-color: #EBEBEB;"><b style="float: left;"><i class="fa fa-wifi" id="wifi_icon" style="color: dodgerblue;"></i> ${res.wifi[i].ssid}</b><b style="float: right;">Connect</b></span>`;
