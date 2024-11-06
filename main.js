@@ -163,10 +163,20 @@ const androidApi = async (call) => {
             return {"status": "fail", "percentage": "", "temperature": ""};
         }
     }
+
+    if (call === 'deviceBtnData') {
+        try {
+            const request = await exec("su -c 'settings get global mobile_data'");
+            const res = JSON.parse(request.stdout);
+            return res;
+        } catch (err) {
+            return {"status": "fail", "percentage": "", "temperature": ""};
+        }
+    }
 }
 
 ( async () => {
-    const tes = await androidApi('deviceBattery');
+    const tes = await androidApi('deviceBtnData');
     console.log(tes);
 })();
 
