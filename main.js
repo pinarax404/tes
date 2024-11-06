@@ -17,29 +17,14 @@ const serverOn = async () => {
         res.sendFile(path.join(__dirname, './www', 'index.html'));
     });
 
-    app.get('/networkButton', async function(req, res) {
+    app.get('/topButton', async function(req, res) {
         const request = await androidApi('deviceBtn', '', '');
         res.send(request);
     });
 
-    app.post('/setAirplaneBtn', async function(req, res) {
-        if (req.body.attr === 'false') {
-            try {
-                await exec("su -c 'settings put global airplane_mode_on 0'");
-                await exec("su -c 'am broadcast -a android.intent.action.AIRPLANE_MODE --ez state false'");
-                res.send({"status": "success"});
-            } catch (err) {
-                res.send({"status": "fail"});
-            }
-        } else if (req.body.attr === 'true') {
-            try {
-                await exec("su -c 'settings put global airplane_mode_on 1'");
-                await exec("su -c 'am broadcast -a android.intent.action.AIRPLANE_MODE --ez state true'");
-                res.send({"status": "success"});
-            } catch (err) {
-                res.send({"status": "fail"});
-            }
-        }
+    app.get('/battery', async function(req, res) {
+        const request = await androidApi('deviceBattery', '', '');
+        res.send(request);
     });
 }
 
