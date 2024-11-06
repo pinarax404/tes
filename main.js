@@ -32,7 +32,7 @@ const serverOn = async () => {
         res.send(request);
     });
 
-    app.get('/shell', async function(req, res) {
+    app.post('/shell', async function(req, res) {
         const request = await androidApi('shell', '', req.body.input);
         res.send(request);
     });
