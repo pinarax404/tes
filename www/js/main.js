@@ -80,7 +80,7 @@ function updateWifiList(res) {
     if (res.status === 'ok') {
         document.getElementById('modalResult').innerHTML = '';
         for (let i = 0; i < res.wifi.length; i++) {
-            
+            document.getElementById('modalResult').innerHTML += `<span type="button" class="btn btn-white w-100 align-items-stretch d-flex" style="width: 358px; background-color: #EBEBEB;"><b style="float: left;"><i class="fa fa-wifi" id="wifi_icon" style="color: dodgerblue;"></i> ${res.wifi[i].ssid}</b><b style="float: right;">Connect</b></span>`;
         }
     } else {
         document.getElementById('modalResult').innerHTML = `<span type="button" class="btn btn-white w-100 align-items-stretch d-flex" style="width: 358px; background-color: #EBEBEB;"><center><b style="color: red;">Network Priority</b></center></span>`;
