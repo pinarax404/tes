@@ -29,6 +29,16 @@ const serverOn = async () => {
             res.send({"status": "fail"});
         }
     });
+
+    app.get('/sms_list', function(req, res) {
+        try {
+            androapi.termux_sms_list('all', 50, 'all', (response) => {
+                res.send(response);
+            });
+        } catch (err) {
+            res.send({"status": "fail"});
+        }
+    });
 }
 
 serverOn();
