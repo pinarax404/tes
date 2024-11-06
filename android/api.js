@@ -86,8 +86,8 @@ const androidApi = async (call, moreCall, input) => {
 
             if (input === 'off') {
                 try {
-                    await exec("su -c 'settings put global airplane_mode_on 1'");
-                    await exec("su -c 'am broadcast -a android.intent.action.AIRPLANE_MODE --ez state true'");
+                    await exec("su -c 'settings put global airplane_mode_on 0'");
+                    await exec("su -c 'am broadcast -a android.intent.action.AIRPLANE_MODE --ez state false'");
 
                     return {"status": "ok"};
                 } catch (err) {
