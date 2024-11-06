@@ -179,7 +179,7 @@ const androidApi = async (call, input) => {
 
     if (call === 'setDeviceBtnData') {
         try {
-            const command = input === 'on' ? 'su -c 'svc data enable'' : 'su -c 'svc data disable'';
+            const command = input === 'on' ? "su -c 'svc data enable'" : "su -c 'svc data disable'";
             await exec(command);
             return {"status": "ok"};
         } catch (err) {
