@@ -24,7 +24,7 @@ const androidApi = async (call, moreCall, input) => {
 
             return {"status": "ok", "percentage": res.percentage, "temperature": res.temperature.toFixed(0)};
         } catch (err) {
-            return {"status": "fail", "percentage": "0", "temperature": "0"};
+            return {"status": "fail", "percentage": "null", "temperature": "null"};
         }
     }
 
@@ -33,9 +33,19 @@ const androidApi = async (call, moreCall, input) => {
             const mobileData = await exec("termux-telephony-deviceinfo");
             const wifi = await exec("termux-wifi-connectioninfo");
 
-            return {"status": "ok", "dataState": JSON.parse(mobileData.stdout), "wifi": JSON.parse(wifi.stdout)};
+            const resMobileData = JSON.parse(mobileData.stdout);
+            const resWifi = JSON.parse(wifi.stdout);
+
+            const priority = resWifi.ssid === '<unknown ssid>' ? "Mobile Data" : resWifi.ssid;
+            const dataState = resMobileData.data_state;
+            const dataType = resMobileData.network_type;
+            const dataOperator = resMobileData.sim_operator_name;
+            const wifiState = resWifi.ssid === '<unknown ssid>' ? "disconnected" : "connected";
+            const wifiSsid = resWifi.ssid;
+
+            return {"status": "ok", "priority": priority, "dataState": dataState, "dataType": dataType, "dataOperator": dataOperator, "wifiState": wifiState, "wifiSsid": wifiSsid};
         } catch (err) {
-            return {"status": "fail", "mobileData": {}, "wifi": {}};
+            return {"status": "fail", "priority": "null", "dataState": "null", "dataType": "null", "dataOperator": "null", "wifiState": "null", "wifiSsid": "null"};
         }
     }
 
