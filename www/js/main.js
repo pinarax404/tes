@@ -15,14 +15,20 @@ $(document).on('click', '[name="btnMobileData"]', function() {
 });
 
 $(document).on('click', '[name="btnWifi"]', function() {
+    let shortPress = true;
     const onOff = this.id;
     var timeout = window.setTimeout(function() {
-        alert('long Press');
+        shortPress = false;
     }, 1000);
+
+    if (shortPress === true ) {
+        alert('short press');
+    } else {
+        alert('long press');
+    }
 
     $(document).on('mouseup', '[name="btnWifi"]', function() {
         window.clearTimeout(timeout);
-        alert('short Press');
     });
 });
 
