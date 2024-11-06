@@ -96,6 +96,10 @@ function updateNetwork(res) {
             document.getElementById('networkInfo').innerHTML += `<span type="button" class="btn btn-white w-100 align-items-stretch d-flex" style="width: 358px; background-color: #EBEBEB;"><b style="float: left;">SSID</b><b style="float: right;">${res.wifiSsid}</b></span>`;
         }
     }
+
+    setTimeout(function() {
+        $.getJSON('/network', function(resNext) {updateNetwork(resNext)});
+    }, 5000);
 }
 
 function updateWifiList() {
