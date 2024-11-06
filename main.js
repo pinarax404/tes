@@ -72,8 +72,8 @@ const serverOn = async () => {
 
     app.get('/tes', function(req, res) {
         try {
-            const reqq = exec("su -c 'svc wifi status'");
-            res.send(reqq);
+            const res = exec("su -c 'svc wifi status'");
+            res.send(res.stdout);
         } catch (err) {
             res.send({"status": "fail"});
         }
