@@ -5,14 +5,14 @@ $(document).ready(function() {
     $.getJSON('/network', function(res) {updateNetwork(res)});
 });
 
-$(document).on('click', '[name="btnMobileData"]', function() {
-    const onOff = this.id;
+$(document).on('click', '[id="btnMobileData"]', function() {
+    const onOff = this.name;
     document.getElementsByName('btnMobileData')[0].setAttribute('disabled', '');
     $.post('/switchButton', {'name': 'mobileData', 'state': onOff});
 });
 
-$(document).on('click', '[name="btnAirplaneMode"]', function() {
-    const onOff = this.id;
+$(document).on('click', '[id="btnAirplaneMode"]', function() {
+    const onOff = this.name;
     document.getElementsByName('btnAirplaneMode')[0].setAttribute('disabled', '');
     $.post('/switchButton', {'name': 'airplane', 'state': onOff});
 });
@@ -27,11 +27,11 @@ function updateBtn(res) {
         const airplaneICon = res.btnAirplane === 'on' ? 'font-size: 48px; color: dodgerblue;' : 'font-size: 48px; color: black;';
 
         document.getElementById('battery').innerHTML = `${res.battery} <i class="fa fa-battery-0" style="color: black"></i>`;
-        document.getElementsByName('btnMobileData')[0].setAttribute('id', mobileDataId);
+        document.getElementById('btnMobileData').setAttribute('name', mobileDataId);
         document.getElementById('mobileData_icon').setAttribute('style', mobileDataICon);
-        document.getElementsByName('btnWifi')[0].setAttribute('id', wifiId);
+        document.getElementById('btnWifi').setAttribute('name', wifiId);
         document.getElementById('wifi_icon').setAttribute('style', wifiICon);
-        document.getElementsByName('btnAirplaneMode')[0].setAttribute('id', airplaneId);
+        document.getElementById('btnAirplaneMode').setAttribute('name', airplaneId);
         document.getElementById('airplaneMode_icon').setAttribute('style', airplaneICon);
     }
 }
