@@ -20,8 +20,14 @@ const serverOn = async () => {
         res.sendFile(path.join(__dirname, './www', 'index.html'));
     });
 
-    androapi['termux_battery_status']((e) => {
-        console.log(e);
+    app.post('/callbackDevice', function(req, res) {
+        try {
+            androapi[req.body.api]((response) => {
+                res.send(response);
+            });
+        } catch (err) {
+            res.send({"status": "fail"});
+        }
     });
 }
 
