@@ -25,7 +25,7 @@ const androidApi = async (call, moreCall, input) => {
 
             const resMobileData = JSON.parse(mobileData.stdout);
             const resWifi = JSON.parse(wifi.stdout);
-            const resBatt = JSON.parse(wifi.stdout);
+            const resBatt = JSON.parse(batt.stdout);
 
             const priority = resWifi.ssid === '<unknown ssid>' ? "mobile_data" : "wifi";
             const dataState = resMobileData.data_state === 'disconnected' ? "Disconnected" : "Connected";
