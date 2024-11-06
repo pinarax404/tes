@@ -196,7 +196,7 @@ const androidApi = async (call) => {
 }
 
 ( async () => {
-    const tes = await androidApi('deviceBtnWifi');
+    const tes = await androidApi('deviceBtnAirplane');
     console.log(tes);
 })();
 
