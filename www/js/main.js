@@ -1,3 +1,5 @@
+const socket = io.connect();
+
 document.getElementById('adbHost').innerHTML = `ADB > ${window.location.host}`;
 
 $(document).ready(function() {
